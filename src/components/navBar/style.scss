@@ -1,0 +1,80 @@
+.navBar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  height: 120px;
+  color: #000000;
+  z-index: 99;
+  background: #f8f8f8;
+  background-size: cover;
+
+  .activity {
+    animation-timing-function: ease-in-out;
+    animation-duration: 0.4s;
+    animation-name: my_animation;
+    .iconfont {
+      color: #16ac15;
+    }
+    .activity-font {
+      color: #16ac15;
+    }
+  }
+
+  li {
+    position: relative;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    .badge-my {
+      position: absolute;
+      top: 10px;
+      right: -50px;
+      }
+    i {
+      font-size: 40px;
+    }
+
+    .icons {
+      width: 44px;
+      height: 44px;
+    }
+
+    .icon-home {
+      width: 48px;
+      background: url("./img/ic_tab_home_off.png") no-repeat;
+      background-size: cover;
+    }
+
+    .icon-gift {
+      background: url("./img/ic_tab_vip_off.png") no-repeat;
+      background-size: cover;
+    }
+    .icon-my {
+      background: url("./img/ic_tab_acc_off.png") no-repeat;
+      background-size: cover;
+    }
+    span {
+      font-size: 20px;
+      font-weight: 400;
+      padding-top: 6px;
+    }
+  }
+
+  @keyframes my_animation {
+    0% {
+      transform: scale(0.94);
+    }
+
+    80% {
+      transform: scale(1.05);
+    }
+
+    100% {
+      transform: scale(1);
+    }
+  }
+}

@@ -1,0 +1,142 @@
+.register {
+ height: 100%;
+ display: flex;
+ flex-flow: column;
+ align-items: center;
+ background: #fff;
+ .main {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  width: 610px;
+  margin-top: 108px;
+  .register-btn {
+   margin-top: 56px;
+   width: 400px;
+   height: 88px;
+   border: none;
+   background: #16ac15;
+   color: #fff;
+   border-radius: 10px;
+  }
+  .reg-title {
+   width: 100%;
+   font-size: 34px;
+   text-align: center;
+   font-family: Microsoft YaHei;
+   font-weight: 600;
+   margin: 34px 0;
+   color: #fff;
+  }
+
+  .reg-remark {
+   width: 100%;
+   font-size: 18px;
+   font-family: Microsoft YaHei;
+   font-weight: 300;
+   color: #747473;
+   margin-bottom: 8px;
+   width: 519px;
+
+   span {
+    padding-left: 20px;
+   }
+  }
+  .inputs {
+   display: flex;
+   align-items: center;
+   width: 610px;
+   height: 96px;
+   margin-bottom: 30px;
+   background: none;
+
+   span {
+    font-size: 30px;
+   }
+
+   input {
+    border: none;
+    width: 60%;
+    font-size: 32px;
+    padding-left: 16px;
+    height: 60px;
+    line-height: 60px;
+    vertical-align: middle;
+    background: none;
+    border-bottom: 1px solid #ababab;
+   }
+
+   input::-webkit-input-placeholder {
+    font-size:28px;
+   }
+  }
+
+  .reg-btn {
+   margin: 30px;
+   width: 519px;
+   height: 100px;
+   line-height: 100px;
+   text-align: center;
+   font-size: 28px;
+   color: #ededed;
+   font-size: 600;
+   background: linear-gradient(-90deg, #107958, #428a61);
+   border-radius: 10px;
+  }
+ }
+
+ .no-activity {
+  color: #e4e4e4 !important;
+  background: rgba(153, 153, 153, 0.9) !important;
+ }
+
+ //注册第二步
+ .main.reg-two {
+  .reg-two-remark {
+   width: 100%;
+   font-size: 18px;
+   font-family: Microsoft YaHei;
+   font-weight: 300;
+   color: #666666;
+   margin-bottom: 8px;
+   margin-top: 8px;
+   width: 519px;
+   display: flex;
+   flex-flow: column;
+
+   span {
+    margin: 20px 0 0 30px;
+   }
+  }
+
+  .reg-mobile {
+   justify-content: space-between;
+
+   span {
+    height: 23px;
+    font-size: 24px;
+    font-weight: 400;
+    color: #126e51;
+    border: none;
+   }
+  }
+
+  .activity {
+   color: #e4e4e4 !important;
+   background: linear-gradient(-90deg, #107958, #428a61) !important;
+  }
+
+  .reg-btn {
+   color: #e4e4e4;
+   background: rgba(153, 153, 153, 0.9);
+  }
+ }
+
+ //注册第三步
+ .main.reg-three {
+  .reg-mobile {
+   justify-content: space-between;
+   margin: 10px 0;
+  }
+ }
+}

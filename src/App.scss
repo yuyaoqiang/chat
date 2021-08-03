@@ -1,0 +1,38 @@
+.App {
+  text-align: center;
+}
+
+.button {
+  width: 750px;
+  height: 88px;
+  background: rgba(255, 156, 0, 1);
+  border-radius: 6px 6px 6px 6px;
+  box-sizing: border-box;
+  margin-bottom: 32px;
+
+  .button-title {
+    height: 88px;
+    line-height: 88px;
+    font-size: 31px;
+    color: #fff;
+  }
+}
+.status-icon{
+  // display: inline-block;
+  // width: 30px;
+  // height: 30px;
+  // background: red;
+  // border-radius: 50%;
+  // position: absolute;
+  // right: 70px;
+  // top: 12px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  border: 2px solid green;
+  box-shadow: inset -1px 0px 50px 5px rgb(255, 0, 0);
+  z-index: 999;
+  padding: 0;
+  pointer-events: none;
+ }

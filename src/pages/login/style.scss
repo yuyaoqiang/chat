@@ -1,0 +1,56 @@
+.login-wrap {
+ height: 100%;
+ width: 100%;
+ background: url("./img/bg.jpeg") no-repeat;
+ background-size: cover;
+ .login-title{
+   padding-top: 200px;
+   font-size: 36px;
+   color: #fff;
+   text-align: center;
+ }
+ .login-footer {
+  width: 100%;
+  position: absolute;
+  color: #fff;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  margin-top: 100px;
+  button {
+   height: 80px;
+   width: 50%;
+   font-size: 30px;
+   border-radius: 10px;
+   border: none;
+   background: #fff;
+   color: #fff;
+   margin: 10px;
+  }
+  .greenColor {
+   color: #16ac15;
+  }
+  .greenBg {
+   background: #16ac15;
+  }
+ }
+ .login-inputs {
+  width: 100%;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  .inputs{
+   margin-top: 20px;
+   width: 60%;
+   input{
+    height: 100px;
+    width: 100%;
+    border-radius: 10px;
+    border: none;
+    padding-left: 30px;
+    font-size: 24px;
+    box-sizing: border-box;
+   }
+  }
+ }
+}
