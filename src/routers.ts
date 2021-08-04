@@ -8,6 +8,8 @@ const Block = React.lazy(() => import('@pages/block'));
 const ChangePwd = React.lazy(() => import('@pages/changePwd'));
 const Chat = React.lazy(() => import('@pages/chat'));
 const FriendInfo = React.lazy(() => import('@pages/friendInfo'));
+const GroupInfo = React.lazy(() => import('@pages/groupInfo'));
+const CreateGroup = React.lazy(() => import('@pages/createGroup'));
 const routeMap = [
   // 首页
   {
@@ -57,6 +59,20 @@ const routeMap = [
     path: "/friendInfo",
     name: "friendInfo",
     component: FriendInfo,
+    auth: true,
+  },
+  // 群详情
+  {
+    path: "/groupInfo",
+    name: "groupInfo",
+    component: GroupInfo,
+    auth: true,
+  },
+  // 群详情
+  {
+    path: "/createGroup",
+    name: "createGroup",
+    component: CreateGroup,
     auth: true,
   },
   // 登录

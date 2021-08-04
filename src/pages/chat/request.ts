@@ -1,9 +1,7 @@
 import { Data, Params } from 'src/request/entity.d';
-import { get, post } from "src/request/api"
+import { get, put } from "src/request/api"
 
-export const myStatus = (params: Params) => {
- return get('/api/v1/app/sale/my-status', params)
-}
-export const add = (data: Data) => {
- return post('/api/data/a', data)
+export const queryPagesByParams = (params: Params) => {
+ const headers = { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' }
+ return put('/api/v1/app/mine/query-trans-log-by-trans-reason', params, headers)
 }

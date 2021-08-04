@@ -11,7 +11,7 @@ const Home = (props: any) => {
   <div className="home">
    <header>
     <span>消息</span>
-    <i className="add-icon iconfont icon-jiahao" style={{ fontSize: 24, color: '#333' }}></i>
+    <i className="add-icon iconfont icon-jiahao" style={{ fontSize: 24, color: '#333' }} onClick={()=>push('/createGroup')}></i>
    </header>
    <SearchBar placeholder="Search" maxLength={8} />
    <ul className="chats-wrap">

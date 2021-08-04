@@ -1,7 +1,6 @@
 .main-chat-wrap {
  position: relative;
  height: 100%;
- background: #fff;
  box-sizing: border-box;
  header {
   height: 100px;
@@ -14,7 +13,32 @@
   }
   i {
    position: absolute;
-   left: 20px;
+  }
+ }
+ .chat-list{
+  background: #EDEDED;
+ }
+ main{
+  height: calc(100% - 250px);
+ }
+ footer{
+  position: absolute;
+  width:100%;
+  padding: 0 30px;
+  bottom: 0;
+  height: 150px;
+  background: #F6F6F6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  .chat-input-wrap{
+   margin: 0;
+   padding: 0;
+   height: 80px;
+  }
+  textarea{
+   padding: 4px 10px;
   }
  }
 }

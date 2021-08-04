@@ -40,3 +40,41 @@ body {
  .greenBg {
   background: #16ac15;
  }
+ footer{
+  .am-list-item{
+    border-radius: 20px;
+  }
+  .am-textarea-control{
+    padding: 0 !important;
+    margin: 0 !important;
+   } 
+   .am-textarea-item{
+     margin: 0 !important;
+     padding: 0 !important;
+     width: 80%;
+   }
+ }
+ .emoji-mart{
+  width: 100% !important;
+  position: absolute;
+  bottom: 80px;
+ }
+ .emoji-mart-search,.emoji-mart-bar{
+   display: none;
+ }
+ .chat-list{
+   height: calc(100% - 250px);
+   .am-list-view-scrollview-content{
+     height: 100%;
+   }
+   .am-list-body{
+    height: 100%;
+    background: #EDEDED;
+  }
+  .list-view-section-body{
+    background: #EDEDED;
+  }
+ }
+ .am-list-brief{
+   margin: 0 !important;
+ }
