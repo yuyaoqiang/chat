@@ -15,29 +15,108 @@
    position: absolute;
   }
  }
- .chat-list{
-  background: #EDEDED;
- }
- main{
+ .chat-wrap {
   height: calc(100% - 250px);
+  ul {
+   position: relative;
+   height: 100%;
+   overflow: auto;
+   padding: 30px 30px 0;
+   -webkit-overflow-scrolling: touch;
+   .chat-time {
+    padding: 10px 0;
+    text-align: center;
+    font-size: 18px;
+    color: #afafaf;
+   }
+   li {
+    margin: 20px 0;
+    letter-spacing: 1px;
+   }
+   .chat-left-wrap {
+    display: flex;
+    p {
+     display: flex;
+     flex-flow: column;
+     max-width: 75%;
+     margin-left: 10px;
+     .name {
+      color: #333;
+      font-size: 24px;
+      padding-bottom: 4px;
+     }
+     .content {
+      word-break: normal;
+      width: auto;
+      display: block;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      overflow: hidden;
+      font-size: 28px;
+      background: #fff;
+      padding: 20px;
+     }
+    }
+    img {
+     flex: 0 0 80px;
+     width: 80px;
+     height: 80px;
+     border-radius: 20px;
+    }
+   }
+   .chat-right-wrap {
+    display: flex;
+    justify-content: flex-end;
+    p {
+     display: flex;
+     align-items: flex-end;
+     flex-flow: column;
+     max-width: 75%;
+     margin-right: 10px;
+     .name {
+      color: #333;
+      font-size: 24px;
+      padding-bottom: 4px;
+     }
+     .content {
+      word-break: normal;
+      width: auto;
+      display: block;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      overflow: hidden;
+      font-size: 28px;
+      background: #fff;
+      padding: 20px;
+      max-width: 100%;
+     }
+    }
+    img {
+     flex: 0 0 80px;
+     width: 80px;
+     height: 80px;
+     border-radius: 20px;
+    }
+   }
+  }
  }
- footer{
+ footer {
   position: absolute;
-  width:100%;
+  width: 100%;
   padding: 0 30px;
   bottom: 0;
   height: 150px;
-  background: #F6F6F6;
+  background: #f6f6f6;
   display: flex;
   justify-content: space-between;
   align-items: center;
   box-sizing: border-box;
-  .chat-input-wrap{
+  .chat-input-wrap {
    margin: 0;
    padding: 0;
    height: 80px;
   }
-  textarea{
+  textarea {
    padding: 4px 10px;
   }
  }

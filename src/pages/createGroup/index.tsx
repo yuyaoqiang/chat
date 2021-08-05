@@ -90,7 +90,7 @@ const Home = (props: any) => {
              <p className="chat-name-date">
               <span>{d.nickName}</span>
              </p>
-            </div>
+            .</div>
            </li>
           </Checkbox.CheckboxItem>
 
