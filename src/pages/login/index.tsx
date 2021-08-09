@@ -18,7 +18,7 @@ const Login = (props: any) => {
    return
   }
   Toast.loading('Loading...', 0)
-  login({ loginName, pwd: password }).then((res: any) => {
+  login({ code:loginName, pwd: password }).then((res: any) => {
    updateUser({ Authorization: res, isLogin: true });
    Toast.success("欢迎您的到来！");
    history.replace("/")

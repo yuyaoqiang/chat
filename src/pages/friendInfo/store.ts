@@ -1,5 +1,4 @@
 import { observable, action, makeObservable } from "mobx";
-import { myStatus } from "./request"
 class HomeState {
  constructor() {
   makeObservable(this)
@@ -14,12 +13,6 @@ class HomeState {
    return;
   }
   this.data = val;
- }
- @action
- refreshData = () => {
-  myStatus({}).then(data=>{
-   this.changeData(data)
-  })
  }
 }
 export default HomeState;

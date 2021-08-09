@@ -6,7 +6,10 @@ import { List, Button } from "antd-mobile";
 import './style.scss'
 const Home = (props: any) => {
  const { push } = useHistory();
- const { homeState } = props;
+ const { userState } = props;
+ const logoutHandle = () => {
+  userState.logout()
+ }
  return (
   <div className="my-wrap">
    <div className="my-top">
@@ -19,10 +22,10 @@ const Home = (props: any) => {
    <List className="my-list">
     <List.Item arrow="horizontal" onClick={() => push("/block")}>黑名单</List.Item>
     <List.Item arrow="horizontal" onClick={() => push("/changePwd")}>修改密码</List.Item>
-    <Button style={{color:'red'}}>退出</Button>
+    <Button style={{ color: 'red' }} onClick={logoutHandle}>退出</Button>
    </List>
    <NavBar />
   </div>
  )
 }
-export default inject('homeState')((observer(Home)));
+export default inject('userState')((observer(Home)));

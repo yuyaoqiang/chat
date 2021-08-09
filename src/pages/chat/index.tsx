@@ -21,34 +21,11 @@ const Home = (props: any) => {
   const { push } = useHistory();
   const ref: any = useRef(null);
   const chatWrapRef: any = useRef(null);
-  const leftRender = (item: any) => {
-    return (
-      <li className="chat-left-wrap">
-        <img src="https://zos.alipayobjects.com/rmsportal/hqQWgTXdrlmVVYi.jpeg" alt="" />
-        <p>
-          <span className="name">名称</span>
-          <span className="content">{item}</span>
-        </p>
-      </li>
-    )
-  }
-  const rightRender = (item: any) => {
-    return <li className="chat-right-wrap">
-      <p>
-        <span className="name">名称</span>
-        <span className="content">{item}</span>
-      </p>
-      <img src="https://zos.alipayobjects.com/rmsportal/hqQWgTXdrlmVVYi.jpeg" alt="" />
-    </li>
-  }
-  const timeRender = () => {
-    return <p className="chat-time">7-18 12:12</p>
-  }
+
   const requestDataByPage = () => {
     let mockData = ['我1', '我', '我', '我', '我', '我']
     setTimeout(() => {
       setData([...mockData, ...data])
-      console.log()
       fixedCurrentScrollLocation()
     }, 200);
   }
@@ -66,7 +43,7 @@ const Home = (props: any) => {
 
   }
   const fixedCurrentScrollLocation = () => {
-    chatWrapRef.current.scrollTop = chatWrapRef.current.scrollHeight - scrollInfo.scrollHeight
+    chatWrapRef.current.scrollTop = chatWrapRef.current.scrollHeight - scrollInfo.scrollHeight-20
   }
 
   // 滚回底部
@@ -101,7 +78,29 @@ const Home = (props: any) => {
       chatWrapRef.current.addEventListener('scroll', onScrollHandle);
     }
   }, [chatWrapRef.current])
-
+  const leftRender = (item: any) => {
+    return (
+      <li className="chat-left-wrap">
+        <img src="https://zos.alipayobjects.com/rmsportal/hqQWgTXdrlmVVYi.jpeg" alt="" />
+        <p>
+          <span className="name">名称</span>
+          <span className="content">{item}</span>
+        </p>
+      </li>
+    )
+  }
+  const rightRender = (item: any) => {
+    return <li className="chat-right-wrap">
+      <p>
+        <span className="name">名称</span>
+        <span className="content">{item}</span>
+      </p>
+      <img src="https://zos.alipayobjects.com/rmsportal/hqQWgTXdrlmVVYi.jpeg" alt="" />
+    </li>
+  }
+  const timeRender = () => {
+    return <p className="chat-time">7-18 12:12</p>
+  }
   return (
     <div className="main-chat-wrap">
       <header>
@@ -139,7 +138,7 @@ const Home = (props: any) => {
       <footer>
         <TextareaItem rows={2} labelNumber={1} value={content} onChange={(value: any) => setContent(value)} />
         <div>
-          <i onClick={() => fixedCurrentScrollLocation()} className="iconfont icon-expressions" style={{ fontSize: 30, marginRight: 10, marginLeft: 10 }}></i>
+          <i onClick={() => setEmojiModal(true)} className="iconfont icon-expressions" style={{ fontSize: 30, marginRight: 10, marginLeft: 10 }}></i>
           <i className="iconfont icon-paper-full" style={{ fontSize: 30, color: '#16ac15' }} onClick={submit}></i>
         </div>
       </footer>

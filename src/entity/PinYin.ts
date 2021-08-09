@@ -471,9 +471,6 @@ export function pySegSort(tarr:any) {
      data: [], //数据
    };
    tarr.map((v:any,index:any) => {
-     // if (v.nickName == '') {
-     // 	console.log('v', v);
-     // }
      // 特殊字符
      if (pattern.test(v.nickName[0]) || v.nickName == '') {
        if ((!zh[i - 1] || zh[i - 1].localeCompare(v.nickName) <= 0) && v.nickName.localeCompare(zh[i]) == -1) {

@@ -13,7 +13,6 @@ const Home = (props: any) => {
     <span>消息</span>
     <i className="add-icon iconfont icon-jiahao" style={{ fontSize: 24, color: '#333' }} onClick={()=>push('/createGroup')}></i>
    </header>
-   <SearchBar placeholder="Search" maxLength={8} />
    <ul className="chats-wrap">
     {
      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10,11,12,13,14,15,16].map(item => {
