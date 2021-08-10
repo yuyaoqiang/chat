@@ -9,7 +9,8 @@ import { pySegSort } from "@entity/PinYin"
 import './style.scss'
 const Home = (props: any) => {
  const { push } = useHistory();
- const { homeState } = props;
+ const { newsletterState } = props;
+ const { cacheFriends } = newsletterState
  const [invitations, setInvitations] = useState<any>([])
  const [searchList, setSearchList] = useState<any>([])
  const [friends, setFriends] = useState<any>([])
@@ -17,59 +18,59 @@ const Home = (props: any) => {
 
  const names = [
   {
-   id: 1,
+   code: 1,
    nickName: 'z'
   },
   {
-   id: 2,
+   code: 2,
    nickName: 'a'
   },
   {
-   id: 3,
+   code: 3,
    nickName: '余'
   },
   {
-   id: 4,
+   code: 4,
    nickName: '张'
   },
   {
-   id: 5,
+   code: 5,
    nickName: '哈'
   },
   {
-   id: 6,
+   code: 6,
    nickName: 'h'
   },
   {
-   id: 7,
+   code: 7,
    nickName: '9'
   },
   {
-   id: 8,
+   code: 8,
    nickName: '@#4'
   },
   {
-   id: 9,
+   code: 9,
    nickName: 'c'
   },
   {
-   id: 10,
+   code: 10,
    nickName: 'F'
   },
   {
-   id: 11,
+   code: 11,
    nickName: 'G'
   },
   {
-   id: 12,
+   code: 12,
    nickName: '流'
   },
   {
-   id: 13,
+   code: 13,
    nickName: '李'
   },
   {
-   id: 14,
+   code: 14,
    nickName: '欣'
   },
  ]
@@ -107,6 +108,7 @@ const Home = (props: any) => {
   relations({}).then((res: any) => {
    const { content } = res;
    const userSorted = sortByNickName(names)
+   cacheFriends(names)
    setFriends(userSorted)
   })
  }
@@ -253,4 +255,4 @@ const Home = (props: any) => {
   </div>
  )
 }
-export default inject('friendState')((observer(Home)));
+export default inject('newsletterState')((observer(Home)));

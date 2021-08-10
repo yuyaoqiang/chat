@@ -1,5 +1,5 @@
 import { observable, action, makeObservable } from "mobx";
-class FriendState {
+class NewsletterState {
  constructor() {
   makeObservable(this)
  }
@@ -10,4 +10,4 @@ class FriendState {
   this.friends = friends
  }
 }
-export default FriendState;
+export default NewsletterState;
