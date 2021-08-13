@@ -1,4 +1,5 @@
 import { observable, computed, action, makeObservable, autorun } from "mobx";
+import { initWS } from "@utils/webSocket"
 class UserState {
   constructor() {
     makeObservable(this)
@@ -22,8 +23,9 @@ class UserState {
   }
 
   //登录成功后更新用户
-  @action updateUser = (user:any) => {
+  @action updateUser = (user: any) => {
     this.user = user
+    initWS(this.user.Authorization)
     sessionStorage.setItem('user', JSON.stringify(user))
   }
 

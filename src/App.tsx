@@ -4,15 +4,8 @@ import { observer, inject } from "mobx-react";
 import AuthRoute from "./utils/authRoute"
 import './App.scss';
 import { Toast } from 'antd-mobile';
-import { transferArrayToObj } from '@utils/helpers';
 Toast.config({ duration: 1.3 })
-const id = 0;
 const App = (props: any) => {
- 
-  
-  const displayStatus=()=>{
-    return <p className="status-icon"></p>
-  }
   return (
     <>
       <Suspense fallback={<div>Loading...</div>}>

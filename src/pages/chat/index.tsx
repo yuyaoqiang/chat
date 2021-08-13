@@ -3,6 +3,7 @@ import NavBar from "@components/navBar"
 import { observer, inject } from "mobx-react"
 import { useHistory } from "react-router-dom";
 import { queryPagesByParams } from "./request";
+import { send } from "@utils/webSocket"
 import "emoji-mart/css/emoji-mart.css";
 //@ts-ignore
 import { Picker } from 'emoji-mart'
@@ -31,6 +32,7 @@ const Home = (props: any) => {
   }
   // 提交消息
   const submit = () => {
+    send(content)
     setContent('')
     setEmojiModal(false)
     setData([...data, content])
@@ -43,7 +45,7 @@ const Home = (props: any) => {
 
   }
   const fixedCurrentScrollLocation = () => {
-    chatWrapRef.current.scrollTop = chatWrapRef.current.scrollHeight - scrollInfo.scrollHeight-20
+    chatWrapRef.current.scrollTop = chatWrapRef.current.scrollHeight - scrollInfo.scrollHeight - 20
   }
 
   // 滚回底部
