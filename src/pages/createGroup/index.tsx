@@ -74,10 +74,10 @@ const Home = (props: any) => {
     <i className=" iconfont icon-fanhui goback" style={{ fontSize: 24, color: '#333' }} onClick={() => goBack()}></i>
     <span>创建群组</span>
    </header>
-   < HeaderGroup 
+   < HeaderGroup
     picture={`https://zos.alipayobjects.com/rmsportal/hqQWgTXdrlmVVYi.jpeg`}
     title="圈子客服昵称"
-    memberInfo={{members:'13000',online:'12'}}
+    memberInfo={{ members: "13000", online: "12"} }
     id="133"
     remark="sdfs"
    />

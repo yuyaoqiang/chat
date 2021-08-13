@@ -4,6 +4,7 @@ class UserState {
   constructor() {
     makeObservable(this)
     autorun(() => {
+      debugger
       const userStr = sessionStorage.getItem('user');
       if (userStr) {
         this.updateUser(JSON.parse(userStr));
@@ -14,7 +15,6 @@ class UserState {
   @observable user: any = {
     Authorization: "",
     isLogin: false,
-
   }
 
   @action logout = () => {

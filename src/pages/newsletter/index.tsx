@@ -132,11 +132,13 @@ const Home = (props: any) => {
   invitationRequest()
   relationsRequest()
  }, [])
+
  useEffect(() => {
   if (isSearching.length === 0) {
    setSearchList([])
   }
  }, [isSearching])
+
  return (
   <div className="newsletter-wrap">
    <header>
