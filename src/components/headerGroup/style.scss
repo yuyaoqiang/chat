@@ -1,0 +1,38 @@
+.header-wrap {
+ width: 100%;
+ background-color: #fff;
+ .container {
+  display: flex;
+  justify-content: space-between;
+  padding: 40px 20px;
+  .picture {
+      width: 160px;
+      height: 160px;
+      img {
+          width: 100%;
+          height: 100%;
+      }
+  }
+  .title {
+      flex: 1;
+      padding-left: 20px;
+      p font {font-size: 30px;} 
+      span {
+          font-size: 14px;
+      }
+  }
+  .icon_edit_wrap {
+      width: 100px;
+      text-align: right;
+      i.iconfont {
+        font-size: 60px;
+      }
+  }
+ }
+ .my-list {
+     position: relative;
+    i.iconfont {
+        font-size: 60px;
+    }
+ }
+}

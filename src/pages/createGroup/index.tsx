@@ -1,5 +1,6 @@
 import React from "react";
 import NavBar from "@components/navBar"
+import HeaderGroup from "@components/headerGroup"
 import { observer, inject } from "mobx-react"
 import { useHistory } from "react-router-dom";
 import { Checkbox } from "antd-mobile";
@@ -73,6 +74,13 @@ const Home = (props: any) => {
     <i className=" iconfont icon-fanhui goback" style={{ fontSize: 24, color: '#333' }} onClick={() => goBack()}></i>
     <span>创建群组</span>
    </header>
+   < HeaderGroup 
+    picture={`https://zos.alipayobjects.com/rmsportal/hqQWgTXdrlmVVYi.jpeg`}
+    title="圈子客服昵称"
+    memberInfo={{members:'13000',online:'12'}}
+    id="133"
+    remark="sdfs"
+   />
    <ul className="chats-wrap">
     {
      a.map((item: any) => {
