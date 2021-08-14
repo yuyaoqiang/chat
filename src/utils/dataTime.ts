@@ -8,6 +8,11 @@ export const mm_dd_hh_mm_ss2 = (date: string) => {
   return dayjs(date).format("MM-DD HH:mm:ss")
  }
 }
+export const mm_dd_hh_mm_ss3 = (date: string) => {
+ if (date) {
+  return dayjs(date).format("MM-DD HH:mm")
+ }
+}
 export const hh_mm_ss_zh = (date: string) => {
  let start = dayjs().valueOf();
  let end = dayjs(date).valueOf();

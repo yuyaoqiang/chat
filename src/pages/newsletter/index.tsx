@@ -3,8 +3,8 @@ import NavBar from "@components/navBar"
 import { observer, inject } from "mobx-react"
 import { useHistory } from "react-router-dom";
 import useDebounce from "@hooks/useDebounce"
-import { relations, searchChatUser, invitation } from "./request";
-import { SearchBar, SwipeAction, Button } from "antd-mobile";
+import { relations, searchChatUser, invitation, invitationHandleWay } from "./request";
+import { SearchBar, SwipeAction, Button, Toast } from "antd-mobile";
 import { pySegSort } from "@entity/PinYin"
 import './style.scss'
 const Home = (props: any) => {
@@ -16,99 +16,17 @@ const Home = (props: any) => {
  const [friends, setFriends] = useState<any>([])
  const [isSearching, setIsSearching] = useState<string>('')
 
- const names = [
-  {
-   code: 1,
-   nickName: 'z'
-  },
-  {
-   code: 2,
-   nickName: 'a'
-  },
-  {
-   code: 3,
-   nickName: '余'
-  },
-  {
-   code: 4,
-   nickName: '张'
-  },
-  {
-   code: 5,
-   nickName: '哈'
-  },
-  {
-   code: 6,
-   nickName: 'h'
-  },
-  {
-   code: 7,
-   nickName: '9'
-  },
-  {
-   code: 8,
-   nickName: '@#4'
-  },
-  {
-   code: 9,
-   nickName: 'c'
-  },
-  {
-   code: 10,
-   nickName: 'F'
-  },
-  {
-   code: 11,
-   nickName: 'G'
-  },
-  {
-   code: 12,
-   nickName: '流'
-  },
-  {
-   code: 13,
-   nickName: '李'
-  },
-  {
-   code: 14,
-   nickName: '欣'
-  },
- ]
- const names2 = [
-  {
-   id: 1,
-   nickName: 'z'
-  },
-  {
-   id: 2,
-   nickName: 'a'
-  }
- ]
- const invitationsMock = [
-  {
-   header: 'https://zos.alipayobjects.com/rmsportal/hqQWgTXdrlmVVYi.jpeg',
-   nickname: '我是Y',
-   code: '123'
-  },
-  {
-   header: 'https://zos.alipayobjects.com/rmsportal/hqQWgTXdrlmVVYi.jpeg',
-   nickname: '我是X',
-   code: '32'
-  }
- ]
  // 好友群列表
  const invitationRequest = () => {
   invitation({}).then((res: any) => {
-   const { content } = res;
-   setInvitations(invitationsMock)
+   setInvitations(res)
   })
  }
  // 好友群列表
  const relationsRequest = () => {
   relations({}).then((res: any) => {
-   const { content } = res;
-   const userSorted = sortByNickName(names)
-   cacheFriends(names)
+   const userSorted = sortByNickName(res) || []
+   cacheFriends(res)
    setFriends(userSorted)
   })
  }
@@ -127,7 +45,23 @@ const Home = (props: any) => {
  const sortByNickName = (users: any[]) => {
   return pySegSort(users)
  }
+ // 通过
+ const passInvitation = (user: any) => {
+  let data = { invitationId: user.id, action: 'PASS' };
+  invitationHandleWay(data).then(res => {
+   invitationRequest()
+   relationsRequest()
+  })
 
+ }
+ // 拒绝
+ const rejectInvitation = (user: any) => {
+  let data = { invitationId: user.id, action: 'REJECT' }
+  invitationHandleWay(data).then(res => {
+   invitationRequest()
+   relationsRequest()
+  })
+ }
  useEffect(() => {
   invitationRequest()
   relationsRequest()
@@ -156,17 +90,17 @@ const Home = (props: any) => {
     {
      invitations.map((item: any) => {
       return (
-       <li className="chat-item" key={item.code}>
+       <li className="chat-item" key={item.id}>
         <p className="chat-item-left">
-         <img src={item.header} alt="" />
+         <img src={item.fromUserHeadIcon} alt="" />
         </p>
         <div className="flex-center">
          <p className="chat-name-date">
-          <span>{item.nickname}</span>
+          <span>{item.fromUserNickName}</span>
          </p>
          <p className="chat-btn">
-          <Button type="primary" inline size="small" style={{ marginRight: '4px' }}>通过</Button>
-          <Button type="warning" inline size="small" style={{ marginRight: '4px' }}>拒绝</Button>
+          <Button type="primary" inline size="small" style={{ marginRight: '4px' }} onClick={() => passInvitation(item)}>通过</Button>
+          <Button type="warning" inline size="small" style={{ marginRight: '4px' }} onClick={() => rejectInvitation(item)}>拒绝</Button>
          </p>
         </div>
        </li>
@@ -199,7 +133,7 @@ const Home = (props: any) => {
           >
            <li className="chat-item" onClick={() => push({ pathname: '/friendInfo', state: user })}>
             <p className="chat-item-left">
-             <img src="https://zos.alipayobjects.com/rmsportal/hqQWgTXdrlmVVYi.jpeg" alt="" />
+             <img src={user.headIcon} alt="" />
             </p>
             <div className="chat-item-right">
              <p className="chat-name-date">

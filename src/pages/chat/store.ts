@@ -1,22 +1,28 @@
 import { observable, action, makeObservable } from "mobx";
+import { subscriber } from "@utils/publish"
 class HomeState {
  constructor() {
   makeObservable(this)
+  subscriber('GET_CHAT_MSG', this.setMsg)
  }
- @observable data = {};
+ @observable data: any[] = [];
 
+ // 设置来信
  @action
- changeData = (val: any) => {
-  if(val.agencyType==='COMMON_USER' && val.extraReceiveShareRate){
-   val.cardToCardPromotionRate=val.cardToCardPromotionRate+val.extraReceiveShareRate
-   this.data = val;
-   return;
-  }
-  this.data = val;
+ setMsg = (msg: any) => {
+  this.data = [...this.data, msg]
  }
+
+ // 设置历史记录
  @action
- refreshData = () => {
- 
+ setHistory = (list: any) => {
+  this.data = [...list, ...this.data]
+ }
+
+ // 清空所有消息
+ @action
+ clearMsg = () => {
+  this.data = []
  }
 }
 export default HomeState;

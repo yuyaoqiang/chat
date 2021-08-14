@@ -22,7 +22,7 @@ const reqeust = axios.create({
 });
 
 // 请求拦截器
-reqeust.interceptors.request.use((config) => {
+reqeust.interceptors.request.use((config:any) => {
  const token: any = sessionStorage.getItem("user")
  const url = sessionStorage.getItem("text-url")
  const strToken = JSON.parse(token) || {}
@@ -33,6 +33,10 @@ reqeust.interceptors.request.use((config) => {
   config.url = `${baseURL}${config.url}`
  }
  config.headers.Authorization = strToken.Authorization;
+ 
+ if (config.header) {
+  config.headers['Content-Type'] = 'application/json; charset=utf-8'
+}
  return config
 }, (error) => {
  error.msg = '服务器异常，请联系管理员！'

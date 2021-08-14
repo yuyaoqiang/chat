@@ -21,12 +21,24 @@ export const post = (url: string, data: Data | string, headers?: any) => {
 }
 
 export const put = (url: string, params: Data | string, headers?: any) => {
- return api({
+ const data = {
   url,
   method: 'put',
-  params,
-  headers: headers ? headers : { 'Content-Type': 'application/json;charset=utf-8' }
- })
+  data: params,
+  headers: { 'Content-Type': 'application/json;charset=utf-8' }
+ }
+ const param = {
+  url,
+  method: 'put',
+  data: params,
+  headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' }
+ }
+ if (!headers) {
+  //@ts-ignore
+  return api(data)
+ }
+  //@ts-ignore
+ return api(param)
 }
 
 export const upload = (url: string, data: Data, params: any) => {
@@ -38,7 +50,7 @@ export const upload = (url: string, data: Data, params: any) => {
  if (process.env.NODE_ENV === 'production') {
   // url = textUrl ? `${textUrl}${url}` : `https://api.rgroiho.cn${url}`
   // @ts-ignore
-  url = textUrl ? `${textUrl}${url}` : `${ window.myConfig.domain}${url}`
+  url = textUrl ? `${textUrl}${url}` : `${window.myConfig.domain}${url}`
  }
  return axios.post(baseURL + url, data, {
   headers: { 'Content-Type': 'multipart/form-data', Authorization: strToken.Authorization, ...params },

@@ -8,7 +8,8 @@ const NavBar = (props: any) => {
   let history = useHistory();
   let location = useLocation();
   const ref = useRef(null);
-  const { commonState } = props;
+  const { commonState, homeState } = props;
+  const { unreadCount } = homeState;
   const to = (path: string) => {
     history.replace(path)
   }
@@ -23,13 +24,13 @@ const NavBar = (props: any) => {
       {
         config.map((item, index) => {
           return <li onClick={() => to(item.path)} key={item.name} className={item.path === location.pathname ? 'activity' : ''}>
-            <i className={`icons ${item.icon} iconfont`} style={{fontSize:24}} />
+            <i className={`icons ${item.icon} iconfont`} style={{ fontSize: 24 }} />
             <span className={item.path === location.pathname ? 'activity-font' : ''}>{item.name}</span>
-            {item.path==='/' && <Badge text={77} overflowCount={55} className="badge-my"/>}
+            {item.path === '/' && unreadCount > 0 && < Badge text={77} overflowCount={unreadCount} className="badge-my" />}
           </li>
         })
       }
     </ul>
   )
 }
-export default inject('commonState')((observer(NavBar)));
+export default inject('commonState', 'homeState')((observer(NavBar)));

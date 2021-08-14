@@ -1,25 +1,35 @@
 import { observable, action, makeObservable } from "mobx";
-import { myStatus } from "./request"
+import { subscriber } from "@utils/publish"
 class HomeState {
  constructor() {
   makeObservable(this)
+  subscriber('RECEIVE_CHAT_MSG', this.setUnreadList)
  }
- @observable data = {};
+
+ // 未读
+ @observable unreadList: any = [];
+
+ // 总未读数
+ @observable unreadCount = 0
+
+ // 当前聊天框角色
+ @observable userAtChat: any = ""
 
  @action
- changeData = (val: any) => {
-  if(val.agencyType==='COMMON_USER' && val.extraReceiveShareRate){
-   val.cardToCardPromotionRate=val.cardToCardPromotionRate+val.extraReceiveShareRate
-   this.data = val;
-   return;
+ setUnreadList = (msg: any) => {
+  let index = this.unreadList.findIndex((item: any) => item.senderUserCode == msg.senderUserCode)
+  if (index !== -1) {
+   let count = this.unreadList[index].unreadCount;
+   this.unreadList[index] = { ...msg, unreadCount: count + 1 }
+  } else {
+   this.unreadList = [{ ...msg, unreadCount: 1 }, ...this.unreadList]
   }
-  this.data = val;
+  this.countReadHandle()
  }
- @action
- refreshData = () => {
-  myStatus({}).then(data=>{
-   this.changeData(data)
-  })
+ countReadHandle = () => {
+  let count = 0;
+  this.unreadList.map((item: any) => count = count + item.unreadCount)
+  this.unreadCount = count;
  }
 }
 export default HomeState;

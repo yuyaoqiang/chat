@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import NavBar from "@components/navBar"
 import { observer, inject } from "mobx-react"
 import { useHistory } from "react-router-dom";
@@ -7,16 +7,17 @@ import './style.scss'
 const Home = (props: any) => {
  const { push } = useHistory();
  const { userState } = props;
+ const { userInfo, logout } = userState;
  const logoutHandle = () => {
-  userState.logout()
+  logout()
  }
  return (
   <div className="my-wrap">
    <div className="my-top">
-    <img src="https://zos.alipayobjects.com/rmsportal/hqQWgTXdrlmVVYi.jpeg" alt="" />
+    <img src={userInfo.headIcon} alt="" />
     <p>
-     <span>我是前端!我是前端!</span>
-     <span>圈子号: 12345576</span>
+     <span>{userInfo.nickName}</span>
+     <span>圈子号: {userInfo.code}</span>
     </p>
    </div>
    <List className="my-list">

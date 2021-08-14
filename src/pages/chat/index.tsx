@@ -4,13 +4,16 @@ import { observer, inject } from "mobx-react"
 import { useHistory } from "react-router-dom";
 import { queryPagesByParams } from "./request";
 import { send } from "@utils/webSocket"
+import { subscriber } from "@utils/publish"
 import "emoji-mart/css/emoji-mart.css";
 //@ts-ignore
 import { Picker } from 'emoji-mart'
 import { TextareaItem } from "antd-mobile";
 import './style.scss'
 const Home = (props: any) => {
-  const { homeState, commonState } = props;
+  const { userState, location } = props;
+  const { userInfo } = userState;
+  const { state = {} } = location;
   const [showEmojiModal, setEmojiModal] = useState(false)
   const [data, setData] = useState<any>([])
   const [content, setContent] = useState('')
@@ -22,20 +25,33 @@ const Home = (props: any) => {
   const { push } = useHistory();
   const ref: any = useRef(null);
   const chatWrapRef: any = useRef(null);
-
+  //  获取历史数据
   const requestDataByPage = () => {
-    let mockData = ['我1', '我', '我', '我', '我', '我']
-    setTimeout(() => {
-      setData([...mockData, ...data])
+    queryPagesByParams({ page: 1, pageNumber: 1, rows: 20, pageSize: 20, size: 20, receiverCode: state.partnerCode }).then(res => {
+      const { content, last }: any = res;
+      subscriber('GET_CHAT_MSG', getSocketMsg)
+      setData(content.reverse())
       fixedCurrentScrollLocation()
-    }, 200);
+    }).catch(err => {
+    })
+  }
+  const getSocketMsg = (msg: any) => {
+    setData([...data, msg])
   }
   // 提交消息
   const submit = () => {
-    send(content)
+    send({
+      cmdKey: 'SEND_CHAT_MSG',
+      chatMsg: content,
+      chatPartnerCode: state.partnerCode
+    })
+    let msg = {
+      senderCode: userInfo.code,
+      msg: content
+    }
     setContent('')
     setEmojiModal(false)
-    setData([...data, content])
+    setData([...data, msg])
     setTimeout(() => {
       scrollToBottom();
     }, 16);
@@ -62,6 +78,10 @@ const Home = (props: any) => {
     const hasTop = scrollTop <= 0 ? true : false
     setScrollInfo({ hasBottom, hasTop, scrollHeight })
   }
+  useEffect(() => {
+    if (!state.partnerCode) push('/')
+    requestDataByPage()
+  }, [])
 
   useEffect(() => {
     if (scrollInfo.hasBottom) {
@@ -80,13 +100,14 @@ const Home = (props: any) => {
       chatWrapRef.current.addEventListener('scroll', onScrollHandle);
     }
   }, [chatWrapRef.current])
+
   const leftRender = (item: any) => {
     return (
       <li className="chat-left-wrap">
-        <img src="https://zos.alipayobjects.com/rmsportal/hqQWgTXdrlmVVYi.jpeg" alt="" />
+        <img src={item.senderHeadIcon} alt="" />
         <p>
-          <span className="name">名称</span>
-          <span className="content">{item}</span>
+          <span className="name">{item.senderNickName}</span>
+          <span className="content">{item.msg}</span>
         </p>
       </li>
     )
@@ -94,10 +115,10 @@ const Home = (props: any) => {
   const rightRender = (item: any) => {
     return <li className="chat-right-wrap">
       <p>
-        <span className="name">名称</span>
-        <span className="content">{item}</span>
+        <span className="name">{userInfo.nickName}</span>
+        <span className="content">{item.msg}</span>
       </p>
-      <img src="https://zos.alipayobjects.com/rmsportal/hqQWgTXdrlmVVYi.jpeg" alt="" />
+      <img src={userInfo.headIcon} alt="" />
     </li>
   }
   const timeRender = () => {
@@ -107,7 +128,7 @@ const Home = (props: any) => {
     <div className="main-chat-wrap">
       <header>
         <i className=" iconfont icon-fanhui" style={{ fontSize: 24, color: '#333', left: '10px', }} onClick={() => push("/")}></i>
-        <span>聊天页</span>
+        <span>{state.nickName}</span>
         <i className=" iconfont icon-gengduo" style={{ fontSize: 24, color: '#333', right: '20px', }} onClick={() => push("/groupInfo")}></i>
       </header>
       <main className="chat-wrap">
@@ -119,8 +140,8 @@ const Home = (props: any) => {
             data.map((item: any, index: number) => {
               return <React.Fragment key={index}>
                 {timeRender()}
-                {index % 2 == 1 && leftRender(item)}
-                {index % 2 == 0 && rightRender(item)}
+                {item.senderCode !== userInfo.code && leftRender(item)}
+                {item.senderCode === userInfo.code && rightRender(item)}
               </React.Fragment>
             })
           }
@@ -147,4 +168,4 @@ const Home = (props: any) => {
     </div>
   )
 }
-export default inject('commonState', 'homeState')((observer(Home)));
+export default inject('commonState', 'homeState', 'userState')((observer(Home)));

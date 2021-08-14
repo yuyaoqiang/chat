@@ -27,7 +27,7 @@ const Home = (props: any) => {
   })
  }
  useEffect(() => {
-  if (!state.code) {
+  if (!state.nickName) {
    push('/newsletter')
   }
   hasFriend()
@@ -40,16 +40,16 @@ const Home = (props: any) => {
     <div>
      <p>
       <span>{state.nickName}</span>
-      <span>圈子号: {state.code}</span>
+      <span>圈子号: {state.partnerCode}</span>
      </p>
-     <InputItem clear placeholder="auto focus" >标题</InputItem>
+     <InputItem clear placeholder="auto focus" >备注</InputItem>
     </div>
    </div>
    <List className="my-list">
     <List.Item extra={<Switch checked={checked} onChange={() => setChecked(!checked)} />}>通知</List.Item>
     <List.Item extra={<Switch checked={checked} onChange={() => setChecked(!checked)} />}>拉黑</List.Item>
     {
-     isFriend && <Button style={{ color: '#16ac15' }} icon={<i className="iconfont icon-liaotian_jihuo" style={{ fontSize: '22px', color: '#16ac15' }}></i>} onClick={() => push('/chat')}>发消息</Button>
+     isFriend && <Button style={{ color: '#16ac15' }} icon={<i className="iconfont icon-liaotian_jihuo" style={{ fontSize: '22px', color: '#16ac15' }}></i>} onClick={() => push({ pathname: '/chat', state: state })}>发消息</Button>
     }
     {
      !isFriend && <Button style={{ color: '#16ac15' }} icon={<i className="iconfont icon-jiahao" style={{ fontSize: '22px', color: '#16ac15' }}></i>} onClick={addFriendHandle}>加好友</Button>

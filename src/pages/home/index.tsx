@@ -2,24 +2,26 @@ import React from "react";
 import NavBar from "@components/navBar"
 import { observer, inject } from "mobx-react"
 import { useHistory } from "react-router-dom";
-import { SearchBar, SwipeAction,Badge } from "antd-mobile";
+import { mm_dd_hh_mm_ss3 } from "@utils/dataTime"
+import { SearchBar, SwipeAction, Badge } from "antd-mobile";
 import './style.scss'
 const Home = (props: any) => {
  const { push } = useHistory();
  const { homeState } = props;
+ const { unreadList } = homeState
  return (
   <div className="home">
    <header>
     <span>消息</span>
-    <i className="add-icon iconfont icon-jiahao" style={{ fontSize: 24, color: '#333' }} onClick={()=>push('/createGroup')}></i>
+    <i className="add-icon iconfont icon-jiahao" style={{ fontSize: 24, color: '#333' }} onClick={() => push('/createGroup')}></i>
    </header>
    <ul className="chats-wrap">
     {
-     [1, 2, 3, 4, 5, 6, 7, 8, 9, 10,11,12,13,14,15,16].map(item => {
+     unreadList.map((item: any) => {
       return (
        <SwipeAction
         style={{ backgroundColor: 'gray' }}
-        key={item}
+        key={item.senderUserCode}
         autoClose
         right={[
          {
@@ -31,17 +33,17 @@ const Home = (props: any) => {
         onOpen={() => console.log('global open')}
         onClose={() => console.log('global close')}
        >
-        <li className="chat-item" onClick={()=>push('/chat')}>
+        <li className="chat-item" onClick={() => push({ pathname: '/chat', state: { ...item, partnerCode: item.senderUserCode } })}>
          <p className="chat-item-left">
-          <img src="https://zos.alipayobjects.com/rmsportal/hqQWgTXdrlmVVYi.jpeg" alt="" />
-          <Badge text={77} overflowCount={55} className="badge-my"/>
+          <img src={item.senderHeadIcon} alt="" />
+          <Badge text={77} overflowCount={item.unreadCount} className="badge-my" />
          </p>
          <div className="chat-item-right">
           <p className="chat-name-date">
-           <span>我是前端群</span>
-           <span>7-18 2:00</span>
+           <span>{item.senderNickName}</span>
+           <span>{mm_dd_hh_mm_ss3(item.sendTime)}</span>
           </p>
-          <p className="chat-fonts">我是前端聊天群我是前端聊天群我是前端聊天群我是前端聊</p>
+          <p className="chat-fonts">{item.msg}</p>
          </div>
         </li>
        </SwipeAction>
