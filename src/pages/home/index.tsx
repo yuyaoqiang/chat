@@ -21,7 +21,7 @@ const Home = (props: any) => {
       return (
        <SwipeAction
         style={{ backgroundColor: 'gray' }}
-        key={item.senderUserCode}
+        key={item.senderCode}
         autoClose
         right={[
          {
@@ -33,7 +33,7 @@ const Home = (props: any) => {
         onOpen={() => console.log('global open')}
         onClose={() => console.log('global close')}
        >
-        <li className="chat-item" onClick={() => push({ pathname: '/chat', state: { ...item, partnerCode: item.senderUserCode } })}>
+        <li className="chat-item" onClick={() => push({ pathname: '/chat', state: { ...item, partnerCode: item.senderCode } })}>
          <p className="chat-item-left">
           <img src={item.senderHeadIcon} alt="" />
           <Badge text={77} overflowCount={item.unreadCount} className="badge-my" />

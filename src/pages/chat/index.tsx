@@ -1,10 +1,11 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import NavBar from "@components/navBar"
 import { observer, inject } from "mobx-react"
 import { useHistory } from "react-router-dom";
 import { queryPagesByParams } from "./request";
 import { send } from "@utils/webSocket"
 import { subscriber } from "@utils/publish"
+import { uuid } from "@utils/helpers"
 import "emoji-mart/css/emoji-mart.css";
 //@ts-ignore
 import { Picker } from 'emoji-mart'
@@ -31,13 +32,15 @@ const Home = (props: any) => {
       const { content, last }: any = res;
       subscriber('GET_CHAT_MSG', getSocketMsg)
       setData(content.reverse())
-      fixedCurrentScrollLocation()
+      // fixedCurrentScrollLocation()
+      scrollToBottom();
     }).catch(err => {
     })
   }
-  const getSocketMsg = (msg: any) => {
-    setData([...data, msg])
-  }
+  const getSocketMsg = useCallback((a) => {
+    setData([...data])
+  }, [data])
+
   // 提交消息
   const submit = () => {
     send({
@@ -46,6 +49,7 @@ const Home = (props: any) => {
       chatPartnerCode: state.partnerCode
     })
     let msg = {
+      id: uuid(),
       senderCode: userInfo.code,
       msg: content
     }
@@ -66,7 +70,21 @@ const Home = (props: any) => {
 
   // 滚回底部
   const scrollToBottom = () => {
-    ref.current.scrollIntoView({ behavior: "smooth" });
+    ref.current && ref.current.scrollIntoView({ behavior: "smooth" });
+  }
+  const throttling = (fn: Function, wait: number, maxTimelong: number,arg:any) => {
+    var timeout: any = null,
+      startTime = new Date().getTime();
+    return function () {
+      if (timeout !== null) clearTimeout(timeout);
+      var curTime = new Date().getTime();
+      if (curTime - startTime >= maxTimelong) {
+        fn(arg);
+        startTime = curTime;
+      } else {
+        timeout = setTimeout(fn, wait);
+      }
+    }
   }
 
   // 获取scroll详情
@@ -77,15 +95,21 @@ const Home = (props: any) => {
     const hasBottom = (clientHeight + scrollTop === scrollHeight)
     const hasTop = scrollTop <= 0 ? true : false
     setScrollInfo({ hasBottom, hasTop, scrollHeight })
+    console.log(hasBottom, hasTop, scrollHeight)
   }
   useEffect(() => {
-    if (!state.partnerCode) push('/')
-    requestDataByPage()
+    if (state.partnerCode) {
+      requestDataByPage()
+      return;
+    }
+    push('/')
   }, [])
 
   useEffect(() => {
     if (scrollInfo.hasBottom) {
-      scrollToBottom();
+      setTimeout(() => {
+        scrollToBottom();
+      }, 16);
     }
   }, [data])
 
@@ -97,7 +121,7 @@ const Home = (props: any) => {
 
   useEffect(() => {
     if (chatWrapRef.current) {
-      chatWrapRef.current.addEventListener('scroll', onScrollHandle);
+      chatWrapRef.current.addEventListener('scroll',(arg:any)=> throttling(onScrollHandle, 60, 100,arg));
     }
   }, [chatWrapRef.current])
 
@@ -137,8 +161,8 @@ const Home = (props: any) => {
             scrollInfo.hasTop && <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', fontSize: '14px', color: '#afafaf' }}>加载中</div>
           }
           {
-            data.map((item: any, index: number) => {
-              return <React.Fragment key={index}>
+            data.map((item: any) => {
+              return <React.Fragment key={item.id}>
                 {timeRender()}
                 {item.senderCode !== userInfo.code && leftRender(item)}
                 {item.senderCode === userInfo.code && rightRender(item)}
@@ -162,7 +186,7 @@ const Home = (props: any) => {
         <TextareaItem rows={2} labelNumber={1} value={content} onChange={(value: any) => setContent(value)} />
         <div>
           <i onClick={() => setEmojiModal(true)} className="iconfont icon-expressions" style={{ fontSize: 30, marginRight: 10, marginLeft: 10 }}></i>
-          <i className="iconfont icon-paper-full" style={{ fontSize: 30, color: '#16ac15' }} onClick={submit}></i>
+          <i className="iconfont icon-paper-full" style={{ fontSize: 30, color: '#16ac15' }} onClick={() => submit()}></i>
         </div>
       </footer>
     </div>
