@@ -7,7 +7,7 @@ const HeaderGroup = (props: Group.HeaderGroupProps) => {
   const [checked, setChecked] = useState(false)
   const { picture, title, memberInfo, id, remark } = props;
   return (
-    <div className="header-wrap">
+    <div className="headergroup-wrap">
       <ul className="container">
         <li className="picture">
           <img src={picture} alt="" />
@@ -24,7 +24,7 @@ const HeaderGroup = (props: Group.HeaderGroupProps) => {
           <List.Item.Brief>12312312312</List.Item.Brief>
           <List.Item.Brief>邀请链接</List.Item.Brief>
         </List.Item>
-        <List.Item extra={<Switch checked={false} onChange={() => false} />}>
+        <List.Item extra={<Switch checked={checked} onChange={() => setChecked(!checked)} />}>
           通知
           <List.Item.Brief>开启</List.Item.Brief>
         </List.Item>
