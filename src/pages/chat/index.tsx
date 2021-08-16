@@ -1,61 +1,47 @@
-import React, { useRef, useState, useEffect, useCallback } from "react";
-import NavBar from "@components/navBar"
+import React, { useRef, useState, useEffect } from "react";
 import { observer, inject } from "mobx-react"
 import { useHistory } from "react-router-dom";
 import { queryPagesByParams } from "./request";
 import { send } from "@utils/webSocket"
-import { subscriber } from "@utils/publish"
 import { uuid } from "@utils/helpers"
 import "emoji-mart/css/emoji-mart.css";
 //@ts-ignore
 import { Picker } from 'emoji-mart'
 import { TextareaItem } from "antd-mobile";
 import './style.scss'
-const Home = (props: any) => {
-  const { userState, location } = props;
+import { mm_dd_hh_mm_ss3 } from "@utils/dataTime";
+import dayjs from "dayjs";
+const Chat = (props: any) => {
+  const { userState, location, chatState } = props;
+  const { setHistory, chatsData, sendMsg } = chatState;
   const { userInfo } = userState;
   const { state = {} } = location;
+  const [pageOption, setPageOption] = useState({ page: 1, size: 20, isDownLoading: false, last: false })
   const [showEmojiModal, setEmojiModal] = useState(false)
-  const [data, setData] = useState<any>([])
   const [content, setContent] = useState('')
-  const [scrollInfo, setScrollInfo] = useState({
-    hasBottom: false,
-    hasTop: false,
-    scrollHeight: 400
-  })
+  const [scrollInfo, setScrollInfo] = useState({ hasBottom: false, hasTop: false, scrollHeight: 400 })
   const { push } = useHistory();
   const ref: any = useRef(null);
   const chatWrapRef: any = useRef(null);
+
   //  获取历史数据
   const requestDataByPage = () => {
-    queryPagesByParams({ page: 1, pageNumber: 1, rows: 20, pageSize: 20, size: 20, receiverCode: state.partnerCode }).then(res => {
-      const { content, last }: any = res;
-      subscriber('GET_CHAT_MSG', getSocketMsg)
-      setData(content.reverse())
-      // fixedCurrentScrollLocation()
-      scrollToBottom();
+    queryPagesByParams({ ...pageOption, receiverCode: state.partnerCode }).then(res => {
+      const { content, last, number }: any = res;
+      setPageOption({ ...pageOption, last, isDownLoading: false, page: number + 2 })
+      setHistory(content.reverse())
+      fixedCurrentScrollLocation()
     }).catch(err => {
     })
   }
-  const getSocketMsg = useCallback((a) => {
-    setData([...data])
-  }, [data])
 
   // 提交消息
   const submit = () => {
-    send({
-      cmdKey: 'SEND_CHAT_MSG',
-      chatMsg: content,
-      chatPartnerCode: state.partnerCode
-    })
-    let msg = {
-      id: uuid(),
-      senderCode: userInfo.code,
-      msg: content
-    }
+    send({ cmdKey: 'SEND_CHAT_MSG', chatMsg: content, chatPartnerCode: state.partnerCode })
+    let msg = { id: uuid(), senderCode: userInfo.code, msg: content, sendTime: new Date().getTime() }
     setContent('')
     setEmojiModal(false)
-    setData([...data, msg])
+    sendMsg(msg)
     setTimeout(() => {
       scrollToBottom();
     }, 16);
@@ -64,29 +50,14 @@ const Home = (props: any) => {
   const upLoadHandle = () => {
 
   }
+  // 下拉加载更多,固定当前位置,防止滚动
   const fixedCurrentScrollLocation = () => {
-    chatWrapRef.current.scrollTop = chatWrapRef.current.scrollHeight - scrollInfo.scrollHeight - 20
+    chatWrapRef.current.scrollTop = chatWrapRef.current.scrollHeight - scrollInfo.scrollHeight
   }
-
   // 滚回底部
   const scrollToBottom = () => {
     ref.current && ref.current.scrollIntoView({ behavior: "smooth" });
   }
-  const throttling = (fn: Function, wait: number, maxTimelong: number,arg:any) => {
-    var timeout: any = null,
-      startTime = new Date().getTime();
-    return function () {
-      if (timeout !== null) clearTimeout(timeout);
-      var curTime = new Date().getTime();
-      if (curTime - startTime >= maxTimelong) {
-        fn(arg);
-        startTime = curTime;
-      } else {
-        timeout = setTimeout(fn, wait);
-      }
-    }
-  }
-
   // 获取scroll详情
   const onScrollHandle = (event: any) => {
     const clientHeight = event.target.clientHeight
@@ -95,8 +66,8 @@ const Home = (props: any) => {
     const hasBottom = (clientHeight + scrollTop === scrollHeight)
     const hasTop = scrollTop <= 0 ? true : false
     setScrollInfo({ hasBottom, hasTop, scrollHeight })
-    console.log(hasBottom, hasTop, scrollHeight)
   }
+
   useEffect(() => {
     if (state.partnerCode) {
       requestDataByPage()
@@ -111,17 +82,18 @@ const Home = (props: any) => {
         scrollToBottom();
       }, 16);
     }
-  }, [data])
+  }, [chatsData])
 
   useEffect(() => {
-    if (scrollInfo.hasTop) {
+    if (scrollInfo.hasTop && !pageOption.isDownLoading) {
       requestDataByPage()
+      setPageOption({ ...pageOption, isDownLoading: true })
     }
   }, [scrollInfo])
 
   useEffect(() => {
     if (chatWrapRef.current) {
-      chatWrapRef.current.addEventListener('scroll',(arg:any)=> throttling(onScrollHandle, 60, 100,arg));
+      chatWrapRef.current.addEventListener('scroll', onScrollHandle);
     }
   }, [chatWrapRef.current])
 
@@ -145,25 +117,35 @@ const Home = (props: any) => {
       <img src={userInfo.headIcon} alt="" />
     </li>
   }
-  const timeRender = () => {
-    return <p className="chat-time">7-18 12:12</p>
+  const timeRender = (nowChat: any, beforeChat: any) => {
+    if (nowChat && beforeChat) {
+      let time = dayjs(nowChat.sendTime).valueOf() - dayjs(beforeChat.sendTime).valueOf()
+      if (time > 30000) {
+        return <p className="chat-time">{mm_dd_hh_mm_ss3(nowChat.sendTime)}</p>
+      }
+      return null
+    }
+    return <p className="chat-time">{mm_dd_hh_mm_ss3(nowChat.sendTime)}</p>
   }
   return (
     <div className="main-chat-wrap">
       <header>
         <i className=" iconfont icon-fanhui" style={{ fontSize: 24, color: '#333', left: '10px', }} onClick={() => push("/")}></i>
-        <span>{state.nickName}</span>
-        <i className=" iconfont icon-gengduo" style={{ fontSize: 24, color: '#333', right: '20px', }} onClick={() => push("/groupInfo")}></i>
+        <span>{state.nickName || state.senderNickName}</span>
+        {state.userType === 'GROUP' && <i className=" iconfont icon-gengduo" style={{ fontSize: 24, color: '#333', right: '20px', }} onClick={() => push("/groupInfo")}></i>}
       </header>
       <main className="chat-wrap">
         <ul ref={chatWrapRef}>
           {
-            scrollInfo.hasTop && <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', fontSize: '14px', color: '#afafaf' }}>加载中</div>
+            scrollInfo.hasTop && !pageOption.last && <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', fontSize: '14px', color: '#afafaf' }}>加载中</div>
           }
           {
-            data.map((item: any) => {
+            scrollInfo.hasTop && pageOption.last && <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', fontSize: '14px', color: '#afafaf' }}>没有更多消息了</div>
+          }
+          {
+            chatsData.map((item: any, index: number) => {
               return <React.Fragment key={item.id}>
-                {timeRender()}
+                {timeRender(item, chatsData[index - 1])}
                 {item.senderCode !== userInfo.code && leftRender(item)}
                 {item.senderCode === userInfo.code && rightRender(item)}
               </React.Fragment>
@@ -192,4 +174,4 @@ const Home = (props: any) => {
     </div>
   )
 }
-export default inject('commonState', 'homeState', 'userState')((observer(Home)));
+export default inject('commonState', 'chatState', 'userState')((observer(Chat)));
