@@ -10,27 +10,18 @@ import './style.scss'
 const Home = (props: any) => {
  const { push } = useHistory();
  const { newsletterState } = props;
- const { cacheFriends } = newsletterState
+ const { cacheFriends, friendsSorted, initFriends } = newsletterState
  const [invitations, setInvitations] = useState<any>([])
  const [searchList, setSearchList] = useState<any>([])
  const [friends, setFriends] = useState<any>([])
  const [isSearching, setIsSearching] = useState<string>('')
 
- // 好友群列表
+ // 好友申请列表
  const invitationRequest = () => {
   invitation({}).then((res: any) => {
    setInvitations(res)
   })
  }
- // 好友群列表
- const relationsRequest = () => {
-  relations({}).then((res: any) => {
-   const userSorted = sortByNickName(res) || []
-   cacheFriends(res)
-   setFriends(userSorted)
-  })
- }
-
  // 防抖搜索
  const searchRequest = useDebounce((e: any) => {
   if (e.length <= 0) return;
@@ -50,7 +41,7 @@ const Home = (props: any) => {
   let data = { invitationId: user.id, action: 'PASS' };
   invitationHandleWay(data).then(res => {
    invitationRequest()
-   relationsRequest()
+   initFriends()
   })
 
  }
@@ -59,12 +50,11 @@ const Home = (props: any) => {
   let data = { invitationId: user.id, action: 'REJECT' }
   invitationHandleWay(data).then(res => {
    invitationRequest()
-   relationsRequest()
+   initFriends()
   })
  }
  useEffect(() => {
   invitationRequest()
-  relationsRequest()
  }, [])
 
  useEffect(() => {
@@ -72,7 +62,13 @@ const Home = (props: any) => {
    setSearchList([])
   }
  }, [isSearching])
-
+ const pushRouter = (user: any) => {
+  if (user.userType === 'USER') {
+   push({ pathname: '/friendInfo', state: user })
+  } else {
+   push({ pathname: '/groupInfo', state: user })
+  }
+ }
  return (
   <div className="newsletter-wrap">
    <header>
@@ -111,7 +107,7 @@ const Home = (props: any) => {
 
    <ul className="chats-wrap">
     {
-     isSearching.length <= 0 && friends.map((item: any) => {
+     isSearching.length <= 0 && friendsSorted.map((item: any) => {
       return (
        <div key={item.initial}>
         <p className="sort-word">{item.initial}</p>
@@ -131,7 +127,7 @@ const Home = (props: any) => {
            onOpen={() => console.log('global open')}
            onClose={() => console.log('global close')}
           >
-           <li className="chat-item" onClick={() => push({ pathname: '/friendInfo', state: user })}>
+           <li className="chat-item" onClick={() => pushRouter(user)}>
             <p className="chat-item-left">
              <img src={user.headIcon} alt="" />
             </p>

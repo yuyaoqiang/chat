@@ -7,8 +7,9 @@ import { SearchBar, SwipeAction, Badge } from "antd-mobile";
 import './style.scss'
 const Home = (props: any) => {
  const { push } = useHistory();
- const { homeState } = props;
- const { unreadList } = homeState
+ const { homeState, chatState } = props;
+ const { unreadList, clearUnreadBySomeUser } = homeState
+ const { setChatUser } = chatState
  return (
   <div className="home">
    <header>
@@ -33,10 +34,14 @@ const Home = (props: any) => {
         onOpen={() => console.log('global open')}
         onClose={() => console.log('global close')}
        >
-        <li className="chat-item" onClick={() => push({ pathname: '/chat', state: { ...item, partnerCode: item.senderCode } })}>
+        <li className="chat-item" onClick={() => {
+         clearUnreadBySomeUser(item.senderCode)
+         setChatUser(item)
+         push({ pathname: '/chat', state: { ...item, partnerCode: item.senderCode } })
+        }}>
          <p className="chat-item-left">
           <img src={item.senderHeadIcon} alt="" />
-          <Badge text={77} overflowCount={item.unreadCount} className="badge-my" />
+          {item.unreadCount > 0 && <Badge text={77} overflowCount={item.unreadCount} className="badge-my" />}
          </p>
          <div className="chat-item-right">
           <p className="chat-name-date">
@@ -55,4 +60,4 @@ const Home = (props: any) => {
   </div>
  )
 }
-export default inject('homeState')((observer(Home)));
+export default inject('homeState', 'chatState')((observer(Home)));

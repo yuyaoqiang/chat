@@ -15,9 +15,11 @@ class HomeState {
  // 当前聊天框角色
  @observable userAtChat: any = ""
 
+ // 设置对话列表未读
  @action
  setUnreadList = (msg: any) => {
-  let index = this.unreadList.findIndex((item: any) => item.senderUserCode == msg.senderUserCode)
+  let index = this.unreadList.findIndex((item: any) => item.senderCode == msg.senderCode)
+  if (this.userAtChat === msg.senderCode) return;
   if (index !== -1) {
    let count = this.unreadList[index].unreadCount;
    this.unreadList[index] = { ...msg, unreadCount: count + 1 }
@@ -26,6 +28,16 @@ class HomeState {
   }
   this.countReadHandle()
  }
+ // 清理某个对话记录
+ @action
+ clearUnreadBySomeUser = (userAtChat: any) => {
+  this.userAtChat = userAtChat
+  let index = this.unreadList.findIndex((item: any) => item.senderCode == userAtChat)
+  this.unreadList[index].unreadCount = 0;
+  this.countReadHandle()
+ }
+
+ // 统计所有记录数量
  countReadHandle = () => {
   let count = 0;
   this.unreadList.map((item: any) => count = count + item.unreadCount)

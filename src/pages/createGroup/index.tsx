@@ -1,73 +1,32 @@
-import React from "react";
-import NavBar from "@components/navBar"
-import HeaderGroup from "@components/headerGroup"
+import React, { useState } from "react";
+import HeaderGroup from ".//headerGroup"
 import { observer, inject } from "mobx-react"
 import { useHistory } from "react-router-dom";
-import { Checkbox } from "antd-mobile";
-import { pySegSort } from "@entity/PinYin"
+import { Checkbox, Toast } from "antd-mobile";
+import { create } from "./request";
 import './style.scss'
 const Home = (props: any) => {
  const { push, goBack } = useHistory();
- const { homeState } = props;
- const names = [
-  {
-   id: 1,
-   nickName: 'z'
-  },
-  {
-   id: 2,
-   nickName: 'a'
-  },
-  {
-   id: 3,
-   nickName: '余'
-  },
-  {
-   id: 4,
-   nickName: '张'
-  },
-  {
-   id: 5,
-   nickName: '哈'
-  },
-  {
-   id: 6,
-   nickName: 'h'
-  },
-  {
-   id: 7,
-   nickName: '9'
-  },
-  {
-   id: 8,
-   nickName: '@#4'
-  },
-  {
-   id: 9,
-   nickName: 'c'
-  },
-  {
-   id: 10,
-   nickName: 'F'
-  },
-  {
-   id: 11,
-   nickName: 'G'
-  },
-  {
-   id: 12,
-   nickName: '流'
-  },
-  {
-   id: 13,
-   nickName: '李'
-  },
-  {
-   id: 14,
-   nickName: '欣'
-  },
- ]
- let a = pySegSort(names)
+ const { homeState, newsletterState } = props;
+ const { friendsSorted,initFriends } = newsletterState;
+ const [groupInfo, setGroupInfo] = useState<any>({ groupNickName: '', userCode: [], groupHeadIcon: "", notice: false })
+ const checkedFriends = (code: any) => {
+  const { userCode } = groupInfo
+  const index = userCode.indexOf(code)
+  if (index !== -1) {
+   userCode.splice(index, 1)
+  } else {
+   userCode.push(code)
+  }
+  setGroupInfo({ ...groupInfo, userCode })
+ }
+ const createGroup = () => {
+  create(groupInfo).then(res => {
+   Toast.success('创建成功');
+   initFriends();
+   push("/newsletter")
+  })
+ }
  return (
   <div className="create-group-wrap">
    <header>
@@ -75,33 +34,29 @@ const Home = (props: any) => {
     <span>创建群组</span>
    </header>
    < HeaderGroup
-    picture={`https://zos.alipayobjects.com/rmsportal/hqQWgTXdrlmVVYi.jpeg`}
-    title="圈子客服昵称"
-    memberInfo={{ members: "13000", online: "12"} }
-    id="133"
-    remark="sdfs"
+    groupInfo={groupInfo}
+    setGroupInfo={setGroupInfo}
    />
    <ul className="chats-wrap">
     {
-     a.map((item: any) => {
+     friendsSorted.map((item: any) => {
       return (
        <div key={item.initial}>
         <p className="sort-word">{item.initial}</p>
         {
-         item.data.map((d: any) => (
-          <Checkbox.CheckboxItem key={d} onChange={() => console.log(d)}>
-           <li className="chat-item" key={d} >
+         item.data.map((user: any) => (
+          <Checkbox.CheckboxItem key={user.partnerCode} checked={groupInfo.userCode.includes(user.partnerCode)} onClick={() => checkedFriends(user.partnerCode)}>
+           <li className="chat-item" key={user.partnerCode} >
             <p className="chat-item-left">
              <img src="https://zos.alipayobjects.com/rmsportal/hqQWgTXdrlmVVYi.jpeg" alt="" />
             </p>
             <div className="chat-item-right">
              <p className="chat-name-date">
-              <span>{d.nickName}</span>
+              <span>{user.nickName}</span>
              </p>
-            .</div>
+            </div>
            </li>
           </Checkbox.CheckboxItem>
-
          ))
         }
        </div>
@@ -109,8 +64,10 @@ const Home = (props: any) => {
      })
     }
    </ul>
-   <NavBar />
+   <div className="group-chat-submit">
+    <span onClick={createGroup}><i className="iconfont icon-liaotian" style={{ fontSize: 24, color: '#fff' }}></i>发起群聊</span>
+   </div>
   </div>
  )
 }
-export default inject('homeState')((observer(Home)));
+export default inject('homeState', 'newsletterState')((observer(Home)));
