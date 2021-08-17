@@ -10,7 +10,7 @@ const Home = (props: any) => {
  const { homeState, chatState, userState } = props;
  const { unreadList, clearUnreadBySomeUser, delMsgByCode, setCurrentUser } = homeState
  const { user } = userState
- const { setChatUser,clearMsg } = chatState
+ const { setChatUser, clearMsg } = chatState
  const toChatPage = (item: any) => {
   clearMsg();
   if (item.oriToChatUserType === 'GROUP') {
@@ -36,6 +36,7 @@ const Home = (props: any) => {
    <ul className="chats-wrap">
     {
      unreadList.map((item: any) => {
+      const flag = item.msg.includes('INVITATION-');
       return (
        <SwipeAction
         style={{ backgroundColor: 'gray' }}
@@ -62,8 +63,11 @@ const Home = (props: any) => {
            <span>{item.oriToChatUserType === 'GROUP' ? item.oriToChatUserNickName : item.senderNickName}</span>
            <span>{mm_dd_hh_mm_ss3(item.sendTime)}</span>
           </p>
-          {item.msg.includes(`@${user.nickName}`) && <p style={{ color: 'red' }} className="chat-fonts">{item.msg}</p>}
-          {!item.msg.includes(`@${user.nickName}`) && <p className="chat-fonts">{item.msg}</p>}
+          {
+           item.msg.includes('INVITATION-') ? <p style={{ color: 'red' }} className="chat-fonts">[邀请]有人邀请您加入群聊</p> : null
+          }
+          {!flag && item.msg.includes(`@${user.nickName}`) && <p style={{ color: 'red' }} className="chat-fonts">{item.msg}</p>}
+          {!flag && !item.msg.includes(`@${user.nickName}`) && <p className="chat-fonts">{item.msg}</p>}
          </div>
         </li>
        </SwipeAction>

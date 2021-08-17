@@ -11,6 +11,7 @@ const FriendInfo = React.lazy(() => import('@pages/friendInfo'));
 const SearchInfo = React.lazy(() => import('@pages/searchInfo'));
 const GroupInfo = React.lazy(() => import('@pages/groupInfo'));
 const CreateGroup = React.lazy(() => import('@pages/createGroup'));
+const joinGroupInfo = React.lazy(() => import('@pages/joinGroupInfo'));
 const routeMap = [
   // 首页
   {
@@ -74,6 +75,13 @@ const routeMap = [
     path: "/groupInfo",
     name: "groupInfo",
     component: GroupInfo,
+    auth: true,
+  },
+  // 加入群页面
+  {
+    path: "/joinGroup",
+    name: "joinGroup",
+    component: joinGroupInfo,
     auth: true,
   },
   // 群详情

@@ -1,34 +1,39 @@
 .my-wrap {
- position: relative;
- height: 100%;
- background: #EDEDED;
- box-sizing: border-box;
- .my-top{
-  height: 400px;
-  display: flex;
-  padding: 0 30px;
+  position: relative;
+  height: 100%;
+  background: #ededed;
   box-sizing: border-box;
-  align-items: center;
-  background: #fff;
-  font-size: 32px;
-  img{
-   display: inline-block;
-   width: 120px;
-   height: 120px;
-   border: none;
-   border-radius: 10px;
-   margin-right: 20px;
+  .my-top {
+    height: 400px;
+    display: flex;
+    padding: 0 30px;
+    box-sizing: border-box;
+    align-items: center;
+    background: #fff;
+    font-size: 32px;
+    img {
+      display: inline-block;
+      width: 120px;
+      height: 120px;
+      border: none;
+      border-radius: 10px;
+      margin-right: 20px;
+    }
+    .group-number {
+      margin-bottom: 30px;
+      color: #818181;
+      font-size: 26px;
+    }
+    p {
+      display: flex;
+      flex-flow: column;
+      width: 100%;
+      .name-wrap {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+      }
+    }
   }
-  p{
-   display: flex;
-   flex-flow: column;
-   span:nth-child(1){
-     margin-bottom: 30px;
-   }
-   span:nth-child(2){
-    color: #818181;
-    font-size: 26px ;
-  }
-  }
- }
 }

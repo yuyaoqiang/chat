@@ -21,7 +21,7 @@ class UserState {
   @action
   setUserInfo = () => {
     mine({}).then((res: any) => {
-      this.user = { ...res, ...this.user };
+      this.user = { ...this.user, ...res};
       sessionStorage.setItem('user', JSON.stringify(this.user))
     })
   }
@@ -37,7 +37,6 @@ class UserState {
     initWS(this.user.Authorization)
     this.setUserInfo()
   }
-
   @computed get msg() {
     return `${this.user.mobilePhone}`
   }

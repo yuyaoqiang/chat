@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "@components/navBar"
 import { observer, inject } from "mobx-react"
+import { copyArticle } from "@utils/helpers"
 import { useHistory } from "react-router-dom";
 import { getGroupInfo, kickOff, transferOwner, forbidden, setAdmin } from "./request"
 import { List, Button, Switch, SwipeAction, Toast } from "antd-mobile";
 import './style.scss'
 const Home = (props: any) => {
   const { push, goBack } = useHistory();
-  const { location, userState, homeState } = props;
+  const { location, userState, homeState,chatState } = props;
   const { state = {} } = location;
   const { user } = userState;
   const { setCurrentUser } = homeState;
+  const { setChatUser } = chatState;
   const [groupInfo, setGroupInfo] = useState<any>({})
   const [myRole, setMyRole] = useState('')
   useEffect(() => {
@@ -81,6 +83,7 @@ const Home = (props: any) => {
     setMyRole('member')
   }
   const toChatPage = (item: any) => {
+    setChatUser({ ...item, oriToChatUserCode: item.partnerCode,oriToChatUserType:item.userType })
     setCurrentUser(item.partnerCode)
     push({ pathname: '/chat', state: item })
   }
@@ -95,9 +98,9 @@ const Home = (props: any) => {
         </p>
       </div>
       <List className="my-list">
-        <List.Item extra={<i className="iconfont icon-fuzhi" style={{ fontSize: '24px' }} onClick={() => console.log("copy")}></i>}  >
+        <List.Item extra={<i className="iconfont icon-fuzhi" style={{ fontSize: '24px' }} onClick={() => copyArticle(groupInfo.invitationLink)}></i>}  >
           信息
-     <List.Item.Brief>{groupInfo.code}</List.Item.Brief>
+     <List.Item.Brief>{groupInfo.invitationLink}</List.Item.Brief>
           <List.Item.Brief>邀请链接</List.Item.Brief>
         </List.Item>
         <div style={{ fontSize: '16px', textAlign: 'center', height: '30px', lineHeight: '30px', borderBottom: '1px solid #DDDDDD' }}>群成员</div>
@@ -167,4 +170,4 @@ const Home = (props: any) => {
     </div>
   )
 }
-export default inject('homeState', 'userState')((observer(Home)));
+export default inject('homeState', 'userState','chatState')((observer(Home)));

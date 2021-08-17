@@ -56,6 +56,23 @@
       background: #fff;
       padding: 20px;
      }
+     .group-info-content{
+      border-radius: 10px;
+      font-size: 28px;
+      background: #fff;
+      max-width: 100%;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      .group-name{
+       margin: 10px 20px;
+       display: flex;
+       flex-flow: column;
+       span:nth-child(1){
+        font-size: 30px;
+       }
+      }
+     }
     }
     img {
      flex: 0 0 80px;
@@ -89,6 +106,22 @@
       background: #fff;
       padding: 20px;
       max-width: 100%;
+      border-radius: 10px;
+     }
+     .group-info-content{
+      font-size: 28px;
+      background: #fff;
+      max-width: 100%;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      .group-name{
+       display: flex;
+       flex-flow: column;
+       span{
+        padding: 10px;
+       }
+      }
      }
     }
     img {
