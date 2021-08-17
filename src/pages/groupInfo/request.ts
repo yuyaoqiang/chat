@@ -1,9 +1,18 @@
 import { Data, Params } from 'src/request/entity.d';
 import { get, post } from "src/request/api"
 
-export const myStatus = (params: Params) => {
- return get('/api/v1/app/sale/my-status', params)
+export const getGroupInfo = (params: Params) => {
+ return get('/api/v1/group/info', params)
 }
-export const add = (data: Data) => {
- return post('/api/data/a', data)
+export const setAdmin = (data: any) => {
+ return post('/api/v1/group/admin', data)
+}
+export const transferOwner = (data: any) => {
+ return post('/api/v1/group/transfer-owner', data)
+}
+export const forbidden = (data: any) => {
+ return post('/api/v1/group/forbidden', data)
+}
+export const kickOff = (data: any) => {
+ return post('/api/v1/group/kick-off', data)
 }

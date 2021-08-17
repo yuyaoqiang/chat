@@ -10,9 +10,19 @@ class ChatState {
  // 设置来信
  @action
  setMsg = (msg: any) => {
-  if (!this.chatUser.senderCode) return;
-  if (this.chatUser.senderCode === msg.senderCode) {
+  if (msg.oriToChatUserType !== this.chatUser.oriToChatUserType) return;
+  let userStr = sessionStorage.getItem('user') || '';
+  let user = JSON.parse(userStr)
+  if (msg.oriToChatUserType === 'GROUP') {
+   if (this.chatUser.oriToChatUserCode !== msg.oriToChatUserCode) return;
+   if (user.code === msg.senderCode) return;
    this.chatsData = [...this.chatsData, msg]
+  } else {
+   if (!this.chatUser.senderCode) return;
+   if (user.code === msg.senderCode) return;
+   if (this.chatUser.senderCode === msg.senderCode) {
+    this.chatsData = [...this.chatsData, msg]
+   }
   }
  }
  // 设置发送信息
@@ -27,6 +37,7 @@ class ChatState {
  // 设置Msg接收人
  @action
  setChatUser = (user: any) => {
+  this.clearMsg()
   this.chatUser = user;
  }
  // 清空所有消息

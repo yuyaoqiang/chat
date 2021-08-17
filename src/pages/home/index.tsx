@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import NavBar from "@components/navBar"
 import { observer, inject } from "mobx-react"
 import { useHistory } from "react-router-dom";
@@ -7,9 +7,26 @@ import { SearchBar, SwipeAction, Badge } from "antd-mobile";
 import './style.scss'
 const Home = (props: any) => {
  const { push } = useHistory();
- const { homeState, chatState } = props;
- const { unreadList, clearUnreadBySomeUser } = homeState
- const { setChatUser } = chatState
+ const { homeState, chatState, userState } = props;
+ const { unreadList, clearUnreadBySomeUser, delMsgByCode, setCurrentUser } = homeState
+ const { user } = userState
+ const { setChatUser,clearMsg } = chatState
+ const toChatPage = (item: any) => {
+  clearMsg();
+  if (item.oriToChatUserType === 'GROUP') {
+   setChatUser(item)
+   setCurrentUser(item.oriToChatUserCode)
+   push({ pathname: '/chat', state: { ...item, partnerCode: item.oriToChatUserCode } })
+   return;
+  } else {
+   setChatUser(item)
+   setCurrentUser(item.senderCode)
+   push({ pathname: '/chat', state: { ...item, partnerCode: item.senderCode } })
+  }
+ }
+ useEffect(() => {
+  setCurrentUser('')
+ }, [])
  return (
   <div className="home">
    <header>
@@ -27,17 +44,14 @@ const Home = (props: any) => {
         right={[
          {
           text: '删除',
-          onPress: () => console.log('delete'),
+          onPress: () => delMsgByCode(item),
           style: { backgroundColor: '#F4333C', fontSize: '16px', color: 'white' },
          },
         ]}
-        onOpen={() => console.log('global open')}
-        onClose={() => console.log('global close')}
        >
         <li className="chat-item" onClick={() => {
-         clearUnreadBySomeUser(item.senderCode)
-         setChatUser(item)
-         push({ pathname: '/chat', state: { ...item, partnerCode: item.senderCode } })
+         clearUnreadBySomeUser(item)
+         toChatPage(item)
         }}>
          <p className="chat-item-left">
           <img src={item.senderHeadIcon} alt="" />
@@ -45,10 +59,11 @@ const Home = (props: any) => {
          </p>
          <div className="chat-item-right">
           <p className="chat-name-date">
-           <span>{item.senderNickName}</span>
+           <span>{item.oriToChatUserType === 'GROUP' ? item.oriToChatUserNickName : item.senderNickName}</span>
            <span>{mm_dd_hh_mm_ss3(item.sendTime)}</span>
           </p>
-          <p className="chat-fonts">{item.msg}</p>
+          {item.msg.includes(`@${user.nickName}`) && <p style={{ color: 'red' }} className="chat-fonts">{item.msg}</p>}
+          {!item.msg.includes(`@${user.nickName}`) && <p className="chat-fonts">{item.msg}</p>}
          </div>
         </li>
        </SwipeAction>
@@ -60,4 +75,4 @@ const Home = (props: any) => {
   </div>
  )
 }
-export default inject('homeState', 'chatState')((observer(Home)));
+export default inject('homeState', 'chatState', 'userState')((observer(Home)));

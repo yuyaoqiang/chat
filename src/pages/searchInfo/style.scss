@@ -1,0 +1,52 @@
+.my-wrap {
+  position: relative;
+  height: 100%;
+  background: #ededed;
+  box-sizing: border-box;
+  .goback {
+    position: absolute;
+    left: 20px;
+    top: 20px;
+  }
+  .my-top {
+    height: 400px;
+    display: flex;
+    padding: 0 30px;
+    box-sizing: border-box;
+    align-items: center;
+    background: #fff;
+    font-size: 32px;
+    .user-info-wrap {
+      width: 100%;
+    }
+    img {
+      display: inline-block;
+      width: 120px;
+      height: 120px;
+      border: none;
+      border-radius: 10px;
+      margin-right: 20px;
+    }
+
+    p {
+      display: flex;
+      flex-flow: column;
+      span:nth-child(1) {
+        margin-bottom: 30px;
+      }
+      span:nth-child(2) {
+        color: #818181;
+        font-size: 26px;
+      }
+      span:nth-child(3) {
+        margin-top: 10px;
+        color: #818181;
+        font-size: 26px;
+      }
+    }
+    .edit-icon{
+      position: absolute;
+      right:20px;
+    }
+  }
+}
