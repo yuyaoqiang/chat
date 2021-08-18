@@ -1,14 +1,40 @@
 import React, { useState } from "react";
 import HeaderGroup from ".//headerGroup"
+import Avatar from "@components/avatar"
+
 import { observer, inject } from "mobx-react"
 import { useHistory } from "react-router-dom";
 import { Checkbox, Toast } from "antd-mobile";
 import { create } from "./request";
+import { setInfo } from "@pages/my/request"
 import './style.scss'
+const urls = [
+ "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
+ "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
+ "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
+ "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
+ "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
+ "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
+ "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
+ "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
+ "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
+ "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
+ "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
+ "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
+ "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
+ "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
+ "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
+ "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
+ "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
+ "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
+ "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
+ "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
+]
 const Home = (props: any) => {
  const { push, goBack } = useHistory();
- const { homeState, newsletterState } = props;
- const { friendsSorted,initFriends } = newsletterState;
+ const { newsletterState } = props;
+ const [visible, setVisible] = useState(false)
+ const { initFriends, onlyFriends } = newsletterState;
  const [groupInfo, setGroupInfo] = useState<any>({ groupNickName: '', userCode: [], groupHeadIcon: "", notice: false })
  const checkedFriends = (code: any) => {
   const { userCode } = groupInfo
@@ -27,6 +53,7 @@ const Home = (props: any) => {
    push("/newsletter")
   })
  }
+ console.log(onlyFriends)
  return (
   <div className="create-group-wrap">
    <header>
@@ -36,10 +63,11 @@ const Home = (props: any) => {
    < HeaderGroup
     groupInfo={groupInfo}
     setGroupInfo={setGroupInfo}
+    setVisible={setVisible}
    />
    <ul className="chats-wrap">
     {
-     friendsSorted.map((item: any) => {
+     onlyFriends.map((item: any) => {
       return (
        <div key={item.initial}>
         <p className="sort-word">{item.initial}</p>
@@ -64,6 +92,13 @@ const Home = (props: any) => {
      })
     }
    </ul>
+   {visible && <Avatar
+    imgData={urls} visible={visible}
+    setVisible={setVisible}
+    submit={(icon: string) => {
+     setGroupInfo({ ...groupInfo, groupHeadIcon: icon })
+     setVisible(false)
+    }} />}
    <div className="group-chat-submit">
     <span onClick={createGroup}><i className="iconfont icon-liaotian" style={{ fontSize: 24, color: '#fff' }}></i>发起群聊</span>
    </div>

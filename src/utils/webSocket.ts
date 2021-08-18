@@ -44,11 +44,12 @@ const send = (msg: any) => {
 const msg = () => {
  socket.addEventListener(WebsocketEvents.message, (event, msg) => {
   let data = JSON.parse(msg.data);
+  let data2 = JSON.parse(msg.data);
   if (data.cmdKey === 'RECEIVE_CHAT_MSG') {
    // 消息页面
    publish.publish(data.cmdKey, data)
    // 聊天页面
-   publish.publish('GET_CHAT_MSG', data)
+   publish.publish('GET_CHAT_MSG', data2)
   }
  })
 }

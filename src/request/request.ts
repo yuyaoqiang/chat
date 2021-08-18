@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { Toast } from 'antd-mobile';
 import { Response } from './entity.d';
+import Store from "../store/index"
 const baseURL: string = process.env.NODE_ENV === 'production' ? '' : '';
 const timeout: number = 60000;
 
@@ -32,7 +33,7 @@ reqeust.interceptors.request.use((config:any) => {
  } else {
   config.url = `${baseURL}${config.url}`
  }
- config.headers.Authorization = strToken.Authorization;
+ config.headers.Authorization = Store.userState.user.Authorization;
  
  if (config.header) {
   config.headers['Content-Type'] = 'application/json; charset=utf-8'

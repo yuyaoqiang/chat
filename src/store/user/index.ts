@@ -20,10 +20,10 @@ class UserState {
 
   @action
   setUserInfo = () => {
-    mine({}).then(res => {
-      this.userInfo = res;
+    mine({}).then((res: any) => {
+      this.user = { ...this.user, ...res};
+      sessionStorage.setItem('user', JSON.stringify(this.user))
     })
-
   }
 
   @action logout = () => {
@@ -34,11 +34,9 @@ class UserState {
   //登录成功后更新用户
   @action updateUser = (user: any) => {
     this.user = user
-    this.setUserInfo()
     initWS(this.user.Authorization)
-    sessionStorage.setItem('user', JSON.stringify(user))
+    this.setUserInfo()
   }
-
   @computed get msg() {
     return `${this.user.mobilePhone}`
   }

@@ -7,12 +7,18 @@ import './style.scss'
 const prompt = Modal.prompt;
 const Home = (props: any) => {
    const { push, goBack } = useHistory();
-   const { newsletterState, homeState, chatState, location } = props;
+   const { newsletterState, location } = props;
    const { state = {} } = location;
-   const { setCurrentUser } = homeState
-   const { setChatUser } = chatState
    const { friends, initFriends } = newsletterState;
    const [userInfo, setUserInfo] = useState<any>({})
+   const [checked, setChecked] = useState(false)
+   const addFriendHandle = () => {
+      Toast.loading('正在添加中', 0)
+      addFriend({ friendCode: userInfo.code }).then(res => {
+         Toast.success('已发出添加好友请求')
+         push('/newsletter')
+      })
+   }
    const editRemark = (remark: string) => {
       setUserInfo({ ...userInfo, partnerRemark: remark })
       editFriendRemark({ userCode: userInfo.partnerCode, remark }).then(res => {
@@ -55,17 +61,11 @@ const Home = (props: any) => {
             </div>
          </div>
          <List className="my-list">
-            {/* <List.Item extra={<Switch checked={checked} onChange={() => setChecked(!checked)} />}>通知</List.Item> */}
+            <List.Item extra={<Switch checked={checked} onChange={() => setChecked(!checked)} />}>通知</List.Item>
             {/* <List.Item extra={<Switch checked={checked} onChange={() => setChecked(!checked)} />}>拉黑</List.Item> */}
-            <Button style={{ color: '#16ac15' }}
-               icon={<i className="iconfont icon-liaotian_jihuo" style={{ fontSize: '22px', color: '#16ac15' }}></i>}
-               onClick={() => {
-                  setCurrentUser(userInfo.partnerCode)
-                  setChatUser({ ...userInfo, senderCode: userInfo.partnerCode,oriToChatUserType:userInfo.userType })
-                  push({ pathname: '/chat', state: userInfo })
-               }}>发消息</Button>
+            <Button style={{ color: '#16ac15' }} icon={<i className="iconfont icon-jiahao" style={{ fontSize: '22px', color: '#16ac15' }}></i>} onClick={addFriendHandle}>加好友</Button>
          </List>
       </div >
    )
 }
-export default inject('newsletterState', 'homeState', 'chatState')((observer(Home)));
+export default inject('newsletterState')((observer(Home)));

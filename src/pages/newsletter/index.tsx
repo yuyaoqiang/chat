@@ -9,11 +9,11 @@ import { pySegSort } from "@entity/PinYin"
 import './style.scss'
 const Home = (props: any) => {
  const { push } = useHistory();
- const { newsletterState } = props;
- const { cacheFriends, friendsSorted, initFriends } = newsletterState
+ const { newsletterState, chatState } = props;
+ const { friendsSorted, initFriends, friends } = newsletterState
+ const { clearMsg } = chatState
  const [invitations, setInvitations] = useState<any>([])
  const [searchList, setSearchList] = useState<any>([])
- const [friends, setFriends] = useState<any>([])
  const [isSearching, setIsSearching] = useState<string>('')
 
  // 好友申请列表
@@ -53,8 +53,18 @@ const Home = (props: any) => {
    initFriends()
   })
  }
+ // 查询好友过滤是否存在好友
+ const searchFilter = (user: any) => {
+  let hasFriend = friends.filter((friend: any) => friend.partnerCode === user.code)
+  if (hasFriend.length === 0) {
+   push({ pathname: '/searchInfo', state: user })
+  } else {
+   push({ pathname: '/friendInfo', state: user })
+  }
+ }
  useEffect(() => {
   invitationRequest()
+  initFriends()
  }, [])
 
  useEffect(() => {
@@ -63,6 +73,7 @@ const Home = (props: any) => {
   }
  }, [isSearching])
  const pushRouter = (user: any) => {
+  clearMsg()
   if (user.userType === 'USER') {
    push({ pathname: '/friendInfo', state: user })
   } else {
@@ -165,7 +176,7 @@ const Home = (props: any) => {
            onOpen={() => console.log('global open')}
            onClose={() => console.log('global close')}
           >
-           <li className="chat-item" onClick={() => push({ pathname: '/friendInfo', state: user })}>
+           <li className="chat-item" onClick={() => searchFilter(user)}>
             <p className="chat-item-left">
              <img src="https://zos.alipayobjects.com/rmsportal/hqQWgTXdrlmVVYi.jpeg" alt="" />
             </p>
@@ -187,4 +198,4 @@ const Home = (props: any) => {
   </div>
  )
 }
-export default inject('newsletterState')((observer(Home)));
+export default inject('newsletterState','chatState')((observer(Home)));

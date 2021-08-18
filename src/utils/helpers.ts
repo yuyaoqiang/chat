@@ -9,23 +9,14 @@ export const transferArrayToObj = (arr: any[]) => {
  return obj
 }
 export const copyArticle = (val: string) => {
-
- var input = document.createElement('input');
- input.setAttribute('id', 'copyId');
- input.value = val
+ var aux = document.createElement("input");
+ aux.setAttribute("value", val);
+ document.body.appendChild(aux);
+ aux.select();
  //@ts-ignore
- document.querySelector('body').appendChild(input)
- const range = document.createRange();
- //@ts-ignore
- range.selectNode(document.getElementById('copyId'));
- const selection = window.getSelection();
- //@ts-ignore
- if (selection.rangeCount > 0) selection.removeAllRanges();
- //@ts-ignore
- selection.addRange(range);
- document.execCommand('copy');
- //@ts-ignore
- document.getElementById('copyId').remove()
+ var content = window.getSelection().toString();
+ document.execCommand("copy");
+ document.body.removeChild(aux);
  Toast.success("复制成功!");
 }
 export const uuid = () => {

@@ -22,8 +22,8 @@ const Register = (props: any) => {
     })
   }
   const register = () => {
-    const { entryPwd, pwd } = registerInfo;
-    if (!code || !entryPwd || !pwd) {
+    const { entryPwd, pwd, invitationCode } = registerInfo;
+    if (!code || !entryPwd || !pwd || !invitationCode) {
       Toast.fail("填写信息不能为空 ", 1.5);
       return
     }
@@ -36,7 +36,7 @@ const Register = (props: any) => {
       return
     }
     Toast.loading('Loading...');
-    save({ code,...registerInfo }).then((res: any) => {
+    save({ code, ...registerInfo }).then((res: any) => {
       Toast.success("注册成功!");
       back();
     })
@@ -49,7 +49,7 @@ const Register = (props: any) => {
     <div className="main">
       <p className="inputs">
         <span>登陆账号</span>
-        <input type="text" value={code} onChange={(e)=>{setCode(e.target.value)}}  placeholder="5-11位大小写英文字母或数字" />
+        <input type="text" value={code} onChange={(e) => { setCode(e.target.value) }} placeholder="5-11位大小写英文字母或数字" />
       </p>
       <p className="inputs">
         <span>登录密码</span>
@@ -58,6 +58,10 @@ const Register = (props: any) => {
       <p className="inputs">
         <span>确认密码</span>
         <input type="password" onChange={(e) => { change(e, "entryPwd") }} placeholder="确认密码" />
+      </p>
+      <p className="inputs">
+        <span>邀请码</span>
+        <input type="text" onChange={(e) => { change(e, "invitationCode") }} placeholder="邀请码" />
       </p>
       <button className="register-btn" onClick={register}>注册</button>
     </div>

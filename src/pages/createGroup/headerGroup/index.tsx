@@ -6,11 +6,11 @@ import "./style.scss"
 const prompt = Modal.prompt;
 const HeaderGroup = (props: any) => {
   const [checked, setChecked] = useState(false)
-  const { groupInfo, setGroupInfo } = props;
+  const { groupInfo, setGroupInfo, setVisible } = props;
   return (
     <div className="header-wrap">
       <ul className="container">
-        <li className="picture">
+        <li className="picture" onClick={() => setVisible(true)}>
           {
             groupInfo.groupHeadIcon
               ? <img src={groupInfo.groupHeadIcon} />
@@ -35,14 +35,15 @@ const HeaderGroup = (props: any) => {
                   text: '确定',
                   onPress: value => { setGroupInfo({ ...groupInfo, groupNickName: value }) },
                 },
-              ], 'default', undefined, ['请输入群名'])}></i></li>
+              ], 'default', undefined, ['请输入群名'])}></i>
+        </li>
       </ul>
-      <List className="my-list">
+      {/* <List className="my-list">
         <List.Item extra={<Switch checked={false} onChange={() => false} />}>
           通知
           <List.Item.Brief>开启</List.Item.Brief>
         </List.Item>
-      </List>
+      </List> */}
     </div >
   )
 }
