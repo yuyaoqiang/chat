@@ -6,12 +6,14 @@ const Avatar = (props: any) => {
     const [data, setData] = useState<any>([])
     const [img, setImg] = useState<any>("")
     useEffect(() => {
+        console.log('avatarData')
         let dataList = imgData.map((val: any, i: any) => ({
             icon: val,
             name: i
         }));
         setData(dataList)
     }, [])
+    console.log('d',data)
     const selectImg = (img: any) => {
         setImg(img)
     }
