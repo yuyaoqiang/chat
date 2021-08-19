@@ -56,6 +56,7 @@ const Chat = (props: any) => {
   }
   // 提交消息
   const submit = () => {
+    if(content.trim().length===0)return;
     let msg = { id: uuid(), senderCode: user.code, msg: content, sendTime: new Date().getTime() }
     const flag = content.includes('INVITATION');
     if (flag) {
@@ -129,6 +130,7 @@ const Chat = (props: any) => {
   }, [chatsData])
 
   useEffect(() => {
+    if (pageOption.last) return;
     if (scrollInfo.hasTop && !pageOption.isDownLoading) {
       requestDataByPage()
       setPageOption({ ...pageOption, isDownLoading: true })

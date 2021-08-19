@@ -1,9 +1,11 @@
 import { observable, action, makeObservable } from "mobx";
 import { subscriber } from "@utils/publish"
+import { queryPagesByParams } from "./request"
 class ChatState {
  constructor() {
   makeObservable(this)
   subscriber('GET_CHAT_MSG', this.setMsg)
+  subscriber('reconnect', this.queryPageDataByChatUser)
  }
  @observable chatsData: any[] = [];
  @observable chatUser: any = {}
@@ -39,6 +41,13 @@ class ChatState {
  setChatUser = (user: any) => {
   this.clearMsg()
   this.chatUser = user;
+ }
+ @action
+ queryPageDataByChatUser = () => {
+  if (!this.chatUser.senderCode) return;
+  queryPagesByParams({ page: 1, size: 20, isDownLoading: false, last: false, receiverCode: this.chatUser.senderCode }).then((res: any) => {
+   this.chatsData = res.content;
+  })
  }
  // 清空所有消息
  @action
