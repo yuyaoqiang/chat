@@ -18,7 +18,7 @@ import avatarIcon17 from "../assets/img/avatars/icon17.jpg"
 import avatarIcon18 from "../assets/img/avatars/icon18.jpg"
 import avatarIcon19 from "../assets/img/avatars/icon19.jpg"
 import avatarIcon20 from "../assets/img/avatars/icon20.jpg"
-const avatarData = {
+const avatarsMap = {
    "icon1": avatarIcon1,
    "icon2": avatarIcon2,
    "icon3": avatarIcon3,
@@ -41,10 +41,26 @@ const avatarData = {
    "icon20": avatarIcon20
 }
 
-const avatarData2 = [
-    { "icon1": avatarIcon1},
-    { "icon2": avatarIcon2},
-    { "icon3": avatarIcon3},
-    { "icon4": avatarIcon4}
+const avatars = [
+    { name: 'icon1', icon: avatarIcon1 },
+    { name: 'icon2', icon: avatarIcon2 },
+    { name: 'icon3', icon: avatarIcon3 },
+    { name: 'icon4', icon: avatarIcon4 },
+    { name: 'icon5', icon: avatarIcon5 },
+    { name: 'icon6', icon: avatarIcon6 },
+    { name: 'icon7', icon: avatarIcon7 },
+    { name: 'icon8', icon: avatarIcon8 },
+    { name: 'icon9', icon: avatarIcon9 },
+    { name: 'icon10', icon: avatarIcon10 },
+    { name: 'icon11', icon: avatarIcon11 },
+    { name: 'icon12', icon: avatarIcon12 },
+    { name: 'icon13', icon: avatarIcon13 },
+    { name: 'icon14', icon: avatarIcon14 },
+    { name: 'icon15', icon: avatarIcon15 },
+    { name: 'icon16', icon: avatarIcon16 },
+    { name: 'icon17', icon: avatarIcon17 },
+    { name: 'icon18', icon: avatarIcon18 },
+    { name: 'icon19', icon: avatarIcon18 },
+    { name: 'icon20', icon: avatarIcon20 }
 ]
-export default avatarData
+export {avatars, avatarsMap}
