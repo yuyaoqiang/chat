@@ -63,7 +63,9 @@ const Home = (props: any) => {
        <div key={item.initial}>
         <p className="sort-word">{item.initial}</p>
         {
-         item.data.map((user: any) => (
+         item.data.map((user: any) => {
+             let icon = `icon${user.headIcon}`
+             return(
           <Checkbox.CheckboxItem key={user.partnerCode} checked={groupInfo.userCode.includes(user.partnerCode)} onClick={() => checkedFriends(user.partnerCode)}>
            <li className="chat-item" key={user.partnerCode} >
             <p className="chat-item-left">
@@ -76,7 +78,7 @@ const Home = (props: any) => {
             </div>
            </li>
           </Checkbox.CheckboxItem>
-         ))
+         )})
         }
        </div>
       )

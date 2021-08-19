@@ -32,27 +32,30 @@ import gpAvatarIcon10 from "../assets/img/avatars/groupIcon10.jpg"
 import gpAvatarIcon11 from "../assets/img/avatars/groupIcon11.jpg"
 import gpAvatarIcon12 from "../assets/img/avatars/groupIcon12.jpg"
 
-const avatarsMap = {
-   "icon1": avatarIcon1,
-   "icon2": avatarIcon2,
-   "icon3": avatarIcon3,
-   "icon4": avatarIcon4,
-   "icon5": avatarIcon5,
-   "icon6": avatarIcon6,
-   "icon7": avatarIcon7,
-   "icon8": avatarIcon8,
-   "icon9": avatarIcon9,
-   "icon10": avatarIcon10,
-   "icon11": avatarIcon11,
-   "icon12": avatarIcon12,
-   "icon13": avatarIcon13,
-   "icon14": avatarIcon14,
-   "icon15": avatarIcon15,
-   "icon16": avatarIcon16,
-   "icon17": avatarIcon17,
-   "icon18": avatarIcon18,
-   "icon19": avatarIcon19,
-   "icon20": avatarIcon20
+interface mapRules {
+    [key:string]: string
+}
+const avatarsMap: mapRules = {
+   icon1: avatarIcon1,
+   icon2: avatarIcon2,
+   icon3: avatarIcon3,
+   icon4: avatarIcon4,
+   icon5: avatarIcon5,
+   icon6: avatarIcon6,
+   icon7: avatarIcon7,
+   icon8: avatarIcon8,
+   icon9: avatarIcon9,
+   icon10: avatarIcon10,
+   icon11: avatarIcon11,
+   icon12: avatarIcon12,
+   icon13: avatarIcon13,
+   icon14: avatarIcon14,
+   icon15: avatarIcon15,
+   icon16: avatarIcon16,
+   icon17: avatarIcon17,
+   icon18: avatarIcon18,
+   icon19: avatarIcon19,
+   icon20: avatarIcon20
 }
 
 const avatars = [
@@ -78,7 +81,7 @@ const avatars = [
     { name: 'icon20', icon: avatarIcon20 }
 ]
 
-const gpAvatarsMap = {
+const gpAvatarsMap: mapRules= {
     "icon1": gpAvatarIcon1,
     "icon2": gpAvatarIcon2,
     "icon3": gpAvatarIcon3,
