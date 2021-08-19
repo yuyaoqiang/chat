@@ -6,5 +6,5 @@ export const getGroupInfo = (params: Params) => {
 }
 
 export const invitation = (data: any) => {
- return put('/api/v1/group/join/by-INVITATIONlink', data)
+ return put('/api/v1/group/join/by-invitation-link', data)
 }

@@ -7,6 +7,7 @@ import { relations, searchChatUser, invitation, invitationHandleWay } from "./re
 import { SearchBar, SwipeAction, Button, Toast } from "antd-mobile";
 import { pySegSort } from "@entity/PinYin"
 import './style.scss'
+import { avatarsMap } from "@utils/avatarData";
 const Home = (props: any) => {
  const { push } = useHistory();
  const { newsletterState, chatState } = props;
@@ -99,7 +100,7 @@ const Home = (props: any) => {
       return (
        <li className="chat-item" key={item.id}>
         <p className="chat-item-left">
-         <img src={item.fromUserHeadIcon} alt="" />
+         <img src={avatarsMap[item.fromUserHeadIcon]} alt="" />
         </p>
         <div className="flex-center">
          <p className="chat-name-date">
@@ -126,12 +127,12 @@ const Home = (props: any) => {
          item.data.map((user: any) => (
           <li className="chat-item" key={item.initial} onClick={() => pushRouter(user)}>
            <p className="chat-item-left">
-            <img src={user.headIcon} alt="" />
+            <img src={avatarsMap[user.headIcon]} alt="" />
            </p>
            <div className="chat-item-right">
             <p className="chat-name-date">
-             {user.userType === 'USER' && <span style={{color:'#56c156'}}>{user.nickName}</span>}
-             {user.userType === 'GROUP' && <span style={{color:'#ff6fce'}}>{user.nickName}</span>}
+             {user.userType === 'USER' && <span style={{ color: '#56c156' }}>{user.nickName}</span>}
+             {user.userType === 'GROUP' && <span style={{ color: '#ff6fce' }}>{user.nickName}</span>}
             </p>
            </div>
           </li>
@@ -150,7 +151,7 @@ const Home = (props: any) => {
          item.data.map((user: any) => (
           <li className="chat-item" key={item.initial} onClick={() => searchFilter(user)}>
            <p className="chat-item-left">
-            <img src={item.headIcon} alt="" />
+            <img src={avatarsMap[user.headIcon]} alt="" />
            </p>
            <div className="chat-item-right">
             <p className="chat-name-date">

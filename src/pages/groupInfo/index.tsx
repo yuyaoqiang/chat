@@ -7,6 +7,7 @@ import { getGroupInfo, kickOff, transferOwner, forbidden, setAdmin, dismiss } fr
 import { List, Button, Switch, SwipeAction, Toast } from "antd-mobile";
 import './style.scss'
 import { yyyymmddhhmmss } from "@utils/dataTime";
+import { avatarsMap } from "@utils/avatarData";
 const Home = (props: any) => {
   const { push, goBack } = useHistory();
   const { location, userState, homeState, chatState } = props;
@@ -24,7 +25,13 @@ const Home = (props: any) => {
     getGroupInfoHandle()
   }, [state])
   const getGroupInfoHandle = () => {
-    getGroupInfo({ groupCode: state.partnerCode }).then(res => {
+    getGroupInfo({ groupCode: state.partnerCode }).then((res: any) => {
+      let isHas = res.groupMembers.filter((member: any) => member.code === user.code)
+      if (isHas.length === 0) {
+        Toast.fail('您不属于该群组');
+        push('/newsletter')
+        return;
+      }
       setGroupInfo(res)
       returnRoleByMe(res)
     })
@@ -85,9 +92,9 @@ const Home = (props: any) => {
     setMyRole('member')
   }
   const toChatPage = (item: any) => {
-    setChatUser({ ...item, oriToChatUserCode: item.partnerCode, oriToChatUserType: item.userType })
+    setChatUser({ ...item, oriToChatUserCode: item.partnerCode, oriToChatUserType: 'GROUP' })
     setCurrentUser(item.partnerCode)
-    push({ pathname: '/chat', state: item })
+    push({ pathname: '/chat', state: { ...item, oriToChatUserCode: item.partnerCode, oriToChatUserType: 'GROUP' } })
   }
   const disbandGroup = () => {
     dismiss({ groupCode: state.partnerCode }).then((res) => {
@@ -113,7 +120,7 @@ const Home = (props: any) => {
     <div className="group-wrap">
       <i className=" iconfont icon-fanhui goback" style={{ fontSize: 24, color: '#333' }} onClick={() => goBack()}></i>
       <div className="my-top">
-        <img src={groupInfo.headIcon} alt="" />
+        <img src={avatarsMap[groupInfo.headIcon]} alt="" />
         <p>
           <span>{groupInfo.nickName}</span>
           <span>圈子号: {groupInfo.code}</span>
@@ -131,7 +138,6 @@ const Home = (props: any) => {
             groupInfo.groupMembers && groupInfo.groupMembers.map((item: any, index: number) => {
               let role = returnRoleByUsers(item, groupInfo)
               let forbidden = forbiddenRole(item)
-              console.log(myRole)
               return (
                 <SwipeAction
                   style={{ backgroundColor: 'gray' }}
@@ -164,7 +170,7 @@ const Home = (props: any) => {
                 >
                   <List.Item onClick={() => toChatByMember(item)}>
                     <div className="sign-friend">
-                      <img src={item.headIcon} />
+                      <img src={avatarsMap[item.headIcon]} />
                       <div className="" style={{ width: '80%', display: 'flex', fontSize: 12, alignItems: 'center', justifyContent: 'space-between' }}>
                         <div>
                           <span className="friend-name">{item.nickName}</span>

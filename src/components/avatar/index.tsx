@@ -3,15 +3,7 @@ import { Modal, Grid } from 'antd-mobile';
 import "./style.scss"
 const Avatar = (props: any) => {
     let { imgData, setVisible, submit } = props
-    const [data, setData] = useState<any>([])
     const [img, setImg] = useState<any>("")
-    useEffect(() => {
-        let dataList = imgData.map((val: any, i: any) => ({
-            icon: val,
-            name: i
-        }));
-        setData(dataList)
-    }, [])
     const selectImg = (img: any) => {
         setImg(img)
     }
@@ -33,14 +25,14 @@ const Avatar = (props: any) => {
                 {
                     text: '确认',
                     onPress: () => {
-                        submit(img.icon)
+                        submit(img.name)
                     }
                 }
             ]
             }
         >
             <div style={{ height: 200, overflow: 'scroll' }}>
-                <Grid data={data} onClick={el => selectImg(el)}
+                <Grid data={imgData} onClick={el => selectImg(el)}
                     renderItem={(dataItem: any, index: number) => (
                         <div style={{ padding: '12.5px' }} className={dataItem.name === img.name ? 'check' : ''} >
                             <img src={dataItem.icon} style={{ width: '100%', height: '100%' }} alt="" />

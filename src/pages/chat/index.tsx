@@ -13,6 +13,7 @@ import { TextareaItem } from "antd-mobile";
 import { mm_dd_hh_mm_ss3 } from "@utils/dataTime";
 import dayjs from "dayjs";
 import './style.scss'
+import { avatarsMap } from "@utils/avatarData";
 
 const Chat = (props: any) => {
   const { push, goBack } = useHistory();
@@ -56,7 +57,7 @@ const Chat = (props: any) => {
   }
   // 提交消息
   const submit = () => {
-    if(content.trim().length===0)return;
+    if (content.trim().length === 0) return;
     let msg = { id: uuid(), senderCode: user.code, msg: content, sendTime: new Date().getTime() }
     const flag = content.includes('INVITATION');
     if (flag) {
@@ -65,7 +66,7 @@ const Chat = (props: any) => {
         setContent('')
         setEmojiModal(false)
         send({ cmdKey: 'SEND_CHAT_MSG', chatMsg: groupInfo, chatPartnerCode: state.partnerCode })
-        sendMsg({ ...msg, content: groupInfo })
+        sendMsg({ ...msg, msg: JSON.stringify(groupInfo) })
         setTimeout(() => {
           scrollToBottom();
         }, 16);
@@ -147,6 +148,7 @@ const Chat = (props: any) => {
       hasForbidden()
     }
   }, [groupInfo])
+
   const generateInvitation = (item: any) => {
     const flag = item.includes('INVITATION');
     return flag;
@@ -162,9 +164,17 @@ const Chat = (props: any) => {
   }
   const searchGroupInfo = (code: any) => {
     Toast.loading('加载中')
-    getGroupInfo({ groupCode: code }).then(res => {
-      joinGroup(res)
-      Toast.hide()
+    getGroupInfo({ groupCode: code }).then((res: any) => {
+      let isHas = res.groupMembers.filter((member: any) => member.code === user.code)
+      if (isHas.length === 0) {
+        joinGroup(res)
+        Toast.hide()
+        return;
+      } else {
+        push({ pathname: '/groupInfo', state: { ...res, partnerCode: res.code } })
+        Toast.hide()
+      }
+
     })
   }
   const leftRender = (item: any) => {
@@ -175,7 +185,7 @@ const Chat = (props: any) => {
     }
     return (
       <li className="chat-left-wrap">
-        <img src={item.senderHeadIcon} alt="" />
+        <img src={avatarsMap[item.senderHeadIcon]} alt="" />
         {!flag ? <p key="msg">
           <span className="name">{item.senderNickName}</span>
           <span className="content">{item.msg}</span>
@@ -183,7 +193,7 @@ const Chat = (props: any) => {
           <p key="invitation" onClick={() => searchGroupInfo(groupInfo.code)}>
             <span className="name">{item.senderNickName}</span>
             <span className="group-info-content">
-              <img src={groupInfo.headIcon} alt="" />
+              <img src={avatarsMap[groupInfo.headIcon]} alt="" />
               <span className="group-name">
                 <span>群名称:{groupInfo.nickName}</span>
                 <span>群号:{groupInfo.code}</span>
@@ -214,11 +224,11 @@ const Chat = (props: any) => {
               <span>群名称:{groupInfo.nickName}</span>
               <span>群号:{groupInfo.code}</span>
             </span>
-            <img src={groupInfo.headIcon} alt="" />
+            <img src={avatarsMap[groupInfo.headIcon]} alt="" />
           </span>
         </p>
       }
-      <img src={user.headIcon} alt="" />
+      <img src={avatarsMap[user.headIcon]} alt="" />
     </li>
   }
   const timeRender = (nowChat: any, beforeChat: any) => {
@@ -231,6 +241,7 @@ const Chat = (props: any) => {
     }
     return <p className="chat-time">{mm_dd_hh_mm_ss3(nowChat.sendTime)}</p>
   }
+  console.log(state)
   return (
     <div className="main-chat-wrap">
       <header>
@@ -305,7 +316,16 @@ const Chat = (props: any) => {
               <i className="iconfont icon-paper-full" style={{ fontSize: 30, color: '#16ac15' }} onClick={() => submit()}></i>
             </div>
           </footer>
-        ) : <footer style={{ background: '#878787', textAlign: 'center', justifyContent: 'center' }}> <span style={{ color: '#FFF', fontSize: 24, textAlign: 'center' }}>您已被禁言</span> </footer>
+        ) : <footer>
+            <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 999, background: '#878787', opacity: 0.1, display: 'flex', alignItems: 'center', paddingLeft: 100 }}> 已禁言</div>
+            <TextareaItem rows={2} labelNumber={1} value={content} onChange={(value: any) => {
+              setContent(value)
+            }} />
+            <div >
+              <i onClick={() => setEmojiModal(true)} className="iconfont icon-expressions" style={{ fontSize: 30, marginRight: 10, marginLeft: 10 }}></i>
+              <i className="iconfont icon-paper-full" style={{ fontSize: 30, color: '#878787' }}></i>
+            </div>
+          </footer>
       }
     </div >
   )

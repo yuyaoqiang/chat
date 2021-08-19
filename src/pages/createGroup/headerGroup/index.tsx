@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import useServiceHooks from "@hooks/useServiceHooks"
 import { List, Switch, Modal, Toast } from "antd-mobile";
 import "./style.scss"
+import { avatarsMap } from "@utils/avatarData";
 const prompt = Modal.prompt;
 const HeaderGroup = (props: any) => {
   const [checked, setChecked] = useState(false)
@@ -13,7 +14,7 @@ const HeaderGroup = (props: any) => {
         <li className="picture" onClick={() => setVisible(true)}>
           {
             groupInfo.groupHeadIcon
-              ? <img src={groupInfo.groupHeadIcon} />
+              ? <img src={avatarsMap[groupInfo.groupHeadIcon]} />
               :
               <i className="iconfont icon-shangchuan" style={{ fontSize: 44, color: '#aeaeae' }}></i>
           }

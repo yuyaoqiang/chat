@@ -8,6 +8,7 @@ import { Checkbox, Toast } from "antd-mobile";
 import { create } from "./request";
 import { setInfo } from "@pages/my/request"
 import './style.scss'
+import { avatarsMap } from "@utils/avatarData";
 const urls = [
  "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
  "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
@@ -47,7 +48,7 @@ const Home = (props: any) => {
   setGroupInfo({ ...groupInfo, userCode })
  }
  const createGroup = () => {
-  if (!groupInfo.groupNickName){
+  if (!groupInfo.groupNickName) {
    Toast.fail('请填写群名称')
    return;
   }
@@ -65,7 +66,6 @@ const Home = (props: any) => {
    push("/newsletter")
   })
  }
- console.log(onlyFriends)
  return (
   <div className="create-group-wrap">
    <header>
@@ -88,7 +88,7 @@ const Home = (props: any) => {
           <Checkbox.CheckboxItem key={user.partnerCode} checked={groupInfo.userCode.includes(user.partnerCode)} onClick={() => checkedFriends(user.partnerCode)}>
            <li className="chat-item" key={user.partnerCode} >
             <p className="chat-item-left">
-             <img src={user.headIcon} alt="" />
+             <img src={avatarsMap[user.headIcon]} alt="" />
             </p>
             <div className="chat-item-right">
              <p className="chat-name-date">

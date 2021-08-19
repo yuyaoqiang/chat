@@ -6,28 +6,19 @@ import { useHistory } from "react-router-dom";
 import { getGroupInfo, invitation } from "./request"
 import { List, Button } from "antd-mobile";
 import './style.scss'
+import { avatarsMap } from "@utils/avatarData";
 const Home = (props: any) => {
   const { push, goBack } = useHistory();
   const { location, userState, homeState, chatState } = props;
   const { state = {} } = location;
-  const { user } = userState;
   const { setCurrentUser } = homeState;
   const { setChatUser } = chatState;
-  const [groupInfo, setGroupInfo] = useState<any>({})
   useEffect(() => {
     if (!state.partnerCode) {
       push("/newsletter")
       return;
     }
-    getGroupInfoHandle()
-  }, [state])
-
-  const getGroupInfoHandle = () => {
-    getGroupInfo({ groupCode: state.partnerCode }).then(res => {
-      setGroupInfo(res)
-    })
-  }
-
+  }, [])
   const returnRoleByUsers = (user: any, users: any) => {
     if (user.code === users.owner.code) {
       return 'owner'
@@ -46,36 +37,31 @@ const Home = (props: any) => {
     })
 
   }
-  const toChatPage = (item: any) => {
-    setChatUser({ ...item, oriToChatUserCode: item.partnerCode, oriToChatUserType: item.userType })
-    setCurrentUser(item.partnerCode)
-    push({ pathname: '/chat', state: item })
-  }
   return (
     <div className="group-wrap">
       <i className=" iconfont icon-fanhui goback" style={{ fontSize: 24, color: '#333' }} onClick={() => goBack()}></i>
       <div className="my-top">
-        <img src={groupInfo.headIcon} alt="" />
+        <img src={avatarsMap[state.headIcon]} alt="" />
         <p>
-          <span>{groupInfo.nickName}</span>
-          <span>圈子号: {groupInfo.code}</span>
+          <span>{state.nickName}</span>
+          <span>圈子号: {state.code}</span>
         </p>
       </div>
       <List className="my-list">
-        <List.Item extra={<i className="iconfont icon-fuzhi" style={{ fontSize: '24px' }} onClick={() => copyArticle(groupInfo.invitationLink)}></i>}  >
+        <List.Item extra={<i className="iconfont icon-fuzhi" style={{ fontSize: '24px' }} onClick={() => copyArticle(state.invitationLink)}></i>}  >
           信息
-     <List.Item.Brief>{groupInfo.invitationLink}</List.Item.Brief>
+     <List.Item.Brief>{state.invitationLink}</List.Item.Brief>
           <List.Item.Brief>邀请链接</List.Item.Brief>
         </List.Item>
         <div style={{ fontSize: '16px', textAlign: 'center', height: '30px', lineHeight: '30px', borderBottom: '1px solid #DDDDDD' }}>群成员</div>
         <div className="group-friend">
           {
-            groupInfo.groupMembers && groupInfo.groupMembers.map((item: any, index: number) => {
-              let role = returnRoleByUsers(item, groupInfo)
+            state.groupMembers && state.groupMembers.map((item: any, index: number) => {
+              let role = returnRoleByUsers(item, state)
               return (
                 <List.Item onClick={() => push('/friendInfo')} key={item.code}>
                   <div className="sign-friend">
-                    <img src="https://zos.alipayobjects.com/rmsportal/hqQWgTXdrlmVVYi.jpeg" />
+                    <img src={avatarsMap[item.headIcon]} />
                     <div>
                       <span className="friend-name">{item.nickName}</span>
                       <p>

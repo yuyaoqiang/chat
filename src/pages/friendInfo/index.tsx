@@ -4,6 +4,7 @@ import { addFriend, editFriendRemark } from "./request"
 import { useHistory } from "react-router-dom";
 import { List, Button, Switch, Toast, Modal } from "antd-mobile";
 import './style.scss'
+import { avatarsMap } from "@utils/avatarData";
 const prompt = Modal.prompt;
 const Home = (props: any) => {
    const { push, goBack } = useHistory();
@@ -31,7 +32,7 @@ const Home = (props: any) => {
       <div className="my-wrap">
          <i className=" iconfont icon-fanhui goback" style={{ fontSize: 24, color: '#333' }} onClick={() => goBack()}></i>
          <div className="my-top">
-            <img src="https://zos.alipayobjects.com/rmsportal/hqQWgTXdrlmVVYi.jpeg" alt="" />
+            <img src={avatarsMap[userInfo.headIcon]} alt="" />
             <div className="user-info-wrap">
                <p>
                   <span>{userInfo.nickName}</span>
