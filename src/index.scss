@@ -78,3 +78,11 @@ body {
  .am-list-brief{
    margin: 0 !important;
  }
+ .am-search-synthetic-ph-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+ }
+ .am-list-extra{
+   flex-basis: 20% !important;
+ }

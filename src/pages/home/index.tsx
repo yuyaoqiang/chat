@@ -26,7 +26,13 @@ const Home = (props: any) => {
  }
  useEffect(() => {
   setCurrentUser('')
+
  }, [])
+ useEffect(() => {
+  if (user.code) {
+   homeState.initHistoryAndListener()
+  }
+ }, [user])
  return (
   <div className="home">
    <header>
@@ -36,11 +42,11 @@ const Home = (props: any) => {
    <ul className="chats-wrap">
     {
      unreadList.map((item: any) => {
-      const flag = item.msg.includes('INVITATION-');
+      const flag = item.msg.includes('INVITATION');
       return (
        <SwipeAction
         style={{ backgroundColor: 'gray' }}
-        key={item.senderCode}
+        key={item.oriToChatUserCode}
         autoClose
         right={[
          {
@@ -55,7 +61,13 @@ const Home = (props: any) => {
          toChatPage(item)
         }}>
          <p className="chat-item-left">
-          <img src={item.senderHeadIcon} alt="" />
+          {
+           item.oriToChatUserType === 'GROUP'
+            ?
+            <img src={item.senderHeadIcon} alt="" style={{ display: 'inline-block', border: '2px solid #ff6fce', borderRadius: 10, overflow: 'hidden' }} />
+            :
+            <img src={item.senderHeadIcon} alt="" style={{ display: 'inline-block', border: '2px solid #56c156', borderRadius: 10, overflow: 'hidden' }} />
+          }
           {item.unreadCount > 0 && <Badge text={77} overflowCount={item.unreadCount} className="badge-my" />}
          </p>
          <div className="chat-item-right">
@@ -64,7 +76,7 @@ const Home = (props: any) => {
            <span>{mm_dd_hh_mm_ss3(item.sendTime)}</span>
           </p>
           {
-           item.msg.includes('INVITATION-') ? <p style={{ color: 'red' }} className="chat-fonts">[邀请]有人邀请您加入群聊</p> : null
+           item.msg.includes('INVITATION') ? <p style={{ color: 'red' }} className="chat-fonts">[邀请]有人邀请您加入群聊</p> : null
           }
           {!flag && item.msg.includes(`@${user.nickName}`) && <p style={{ color: 'red' }} className="chat-fonts">{item.msg}</p>}
           {!flag && !item.msg.includes(`@${user.nickName}`) && <p className="chat-fonts">{item.msg}</p>}

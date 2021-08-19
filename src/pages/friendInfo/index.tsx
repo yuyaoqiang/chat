@@ -10,7 +10,7 @@ const Home = (props: any) => {
    const { newsletterState, homeState, chatState, location } = props;
    const { state = {} } = location;
    const { setCurrentUser } = homeState
-   const { setChatUser } = chatState
+   const { setChatUser, clearMsg } = chatState
    const { friends, initFriends } = newsletterState;
    const [userInfo, setUserInfo] = useState<any>({})
    const editRemark = (remark: string) => {
@@ -36,21 +36,23 @@ const Home = (props: any) => {
                <p>
                   <span>{userInfo.nickName}</span>
                   <span>圈子号: {userInfo.partnerCode || userInfo.code}</span>
-                  <span>备注: {userInfo.partnerRemark}</span>
-                  <i
-                     style={{ fontSize: 30 }}
-                     className="edit-icon iconfont icon-icon-"
-                     onClick={() => prompt('备注', '请输入备注',
-                        [
-                           {
-                              text: '取消',
-                              onPress: value => { }
-                           },
-                           {
-                              text: '修改',
-                              onPress: value => editRemark(value),
-                           },
-                        ], 'default', undefined, ['请输入备注'])}></i>
+                  <span>备注: {userInfo.partnerRemark}
+                     <i
+                        style={{ fontSize: 30 }}
+                        className="edit-icon iconfont icon-icon-"
+                        onClick={() => prompt('备注', '请输入备注',
+                           [
+                              {
+                                 text: '取消',
+                                 onPress: value => { }
+                              },
+                              {
+                                 text: '修改',
+                                 onPress: value => editRemark(value),
+                              },
+                           ], 'default', undefined, ['请输入备注'])}></i>
+                  </span>
+
                </p>
             </div>
          </div>
@@ -61,7 +63,7 @@ const Home = (props: any) => {
                icon={<i className="iconfont icon-liaotian_jihuo" style={{ fontSize: '22px', color: '#16ac15' }}></i>}
                onClick={() => {
                   setCurrentUser(userInfo.partnerCode)
-                  setChatUser({ ...userInfo, senderCode: userInfo.partnerCode,oriToChatUserType:userInfo.userType })
+                  setChatUser({ ...userInfo, senderCode: userInfo.partnerCode, oriToChatUserType: userInfo.userType })
                   push({ pathname: '/chat', state: userInfo })
                }}>发消息</Button>
          </List>

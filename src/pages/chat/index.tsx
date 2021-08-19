@@ -2,28 +2,32 @@ import React, { useRef, useState, useEffect } from "react";
 import { observer, inject } from "mobx-react"
 import { useHistory } from "react-router-dom";
 import { queryPagesByParams, invitationLink } from "./request";
+import { getGroupInfo } from "@pages/groupInfo/request";
 import { send } from "@utils/webSocket"
 import { uuid } from "@utils/helpers"
-import { Modal } from "antd-mobile"
+import { Modal, Toast } from "antd-mobile"
 import "emoji-mart/css/emoji-mart.css";
 //@ts-ignore
 import { Picker } from 'emoji-mart'
 import { TextareaItem } from "antd-mobile";
-import './style.scss'
 import { mm_dd_hh_mm_ss3 } from "@utils/dataTime";
 import dayjs from "dayjs";
-import { join } from "lodash";
+import './style.scss'
+
 const Chat = (props: any) => {
   const { push, goBack } = useHistory();
   const ref: any = useRef(null);
   const chatWrapRef: any = useRef(null);
-  const { userState, location, chatState, newsletterState } = props;
+  const { userState, location, chatState, newsletterState, homeState } = props;
   const { setHistory, chatsData, sendMsg } = chatState;
+  const { delMsgByCode } = homeState;
   const { friends } = newsletterState
   const { state = {} } = location;
   const { user } = userState;
   const [content, setContent] = useState('')
+  const [groupInfo, setGroupInfo] = useState<any>({})
   const [showEmojiModal, setEmojiModal] = useState(false)
+  const [forbiddenMember, setHasForbiddenMember] = useState(false)
   const [callVisible, setCallVisible] = useState(false)
   const [pageOption, setPageOption] = useState({ page: 1, size: 20, isDownLoading: false, last: false })
   const [scrollInfo, setScrollInfo] = useState({ hasBottom: false, hasTop: false, scrollHeight: 400 })
@@ -36,12 +40,24 @@ const Chat = (props: any) => {
       setHistory(content.reverse())
       fixedCurrentScrollLocation()
     }).catch(err => {
+      if (err.data.message === '无权查看此群信息') {
+        delMsgByCode(state)
+        Toast.fail('您已不在该群组')
+        push('/')
+        return;
+      }
+      if (err.data.message === '用户不存在') {
+        delMsgByCode(state)
+        Toast.fail('该群组已解散')
+        push('/')
+        return;
+      }
     })
   }
   // 提交消息
   const submit = () => {
     let msg = { id: uuid(), senderCode: user.code, msg: content, sendTime: new Date().getTime() }
-    const flag = content.includes('INVITATION-');
+    const flag = content.includes('INVITATION');
     if (flag) {
       invitationLink({ invitationLink: content.trim() }).then((res: any) => {
         let groupInfo = { code: res.code, nickName: res.nickName, headIcon: res.headIcon, invitationLink: content.trim() }
@@ -81,14 +97,21 @@ const Chat = (props: any) => {
     const hasTop = scrollTop <= 0 ? true : false
     setScrollInfo({ hasBottom, hasTop, scrollHeight })
   }
-
+  const getGroupInfoHandle = () => {
+    getGroupInfo({ groupCode: state.partnerCode }).then(res => {
+      setGroupInfo(res)
+    })
+  }
   useEffect(() => {
     if (state.partnerCode) {
       requestDataByPage()
+      if (state.userType === 'GROUP') getGroupInfoHandle()
+      if (state.oriToChatUserType === 'GROUP') getGroupInfoHandle()
       return;
     }
     push('/')
   }, [])
+
   useEffect(() => {
     if (content) {
       let str = content.substr(content.length - 1, 1)
@@ -117,18 +140,31 @@ const Chat = (props: any) => {
       chatWrapRef.current.addEventListener('scroll', onScrollHandle);
     }
   }, [chatWrapRef.current])
-
+  useEffect(() => {
+    if (groupInfo.forbiddenMembers) {
+      hasForbidden()
+    }
+  }, [groupInfo])
   const generateInvitation = (item: any) => {
-    const flag = item.includes('INVITATION-');
+    const flag = item.includes('INVITATION');
     return flag;
   }
-
+  const hasForbidden = () => {
+    let hasForbidden = groupInfo.forbiddenMembers.filter((item: any) => item.code === user.code)
+    setHasForbiddenMember(hasForbidden.length > 0 ? true : false)
+  }
   const joinGroup = (groupInfo: any) => {
     if (groupInfo.invitationLink) {
       push({ pathname: '/joinGroup', state: { ...groupInfo, partnerCode: groupInfo.code } })
     }
   }
-
+  const searchGroupInfo = (code: any) => {
+    Toast.loading('加载中')
+    getGroupInfo({ groupCode: code }).then(res => {
+      joinGroup(res)
+      Toast.hide()
+    })
+  }
   const leftRender = (item: any) => {
     let groupInfo: any = {}
     let flag = generateInvitation(item.msg);
@@ -142,7 +178,7 @@ const Chat = (props: any) => {
           <span className="name">{item.senderNickName}</span>
           <span className="content">{item.msg}</span>
         </p> :
-          <p key="invitation">
+          <p key="invitation" onClick={() => searchGroupInfo(groupInfo.code)}>
             <span className="name">{item.senderNickName}</span>
             <span className="group-info-content">
               <img src={groupInfo.headIcon} alt="" />
@@ -166,12 +202,12 @@ const Chat = (props: any) => {
     }
     return <li className="chat-right-wrap">
       {!flag ? <p key="msg">
-        <span className="name">{item.senderNickName}</span>
+        <span className="name">{user.nickName}</span>
         <span className="content">{item.msg}</span>
       </p> :
         <p key="invitation">
-          <span className="name">{item.senderNickName}</span>
-          <span className="group-info-content" onClick={() => joinGroup(groupInfo)}>
+          <span className="name">{user.nickName}</span>
+          <span className="group-info-content" onClick={() => searchGroupInfo(groupInfo.code)}>
             <span className="group-name">
               <span>群名称:{groupInfo.nickName}</span>
               <span>群号:{groupInfo.code}</span>
@@ -256,16 +292,20 @@ const Chat = (props: any) => {
           })
         }
       </Modal>
-      <footer>
-        <TextareaItem rows={2} labelNumber={1} value={content} onChange={(value: any) => {
-          setContent(value)
-        }} />
-        <div>
-          <i onClick={() => setEmojiModal(true)} className="iconfont icon-expressions" style={{ fontSize: 30, marginRight: 10, marginLeft: 10 }}></i>
-          <i className="iconfont icon-paper-full" style={{ fontSize: 30, color: '#16ac15' }} onClick={() => submit()}></i>
-        </div>
-      </footer>
+      {
+        !forbiddenMember ? (
+          <footer>
+            <TextareaItem rows={2} labelNumber={1} value={content} onChange={(value: any) => {
+              setContent(value)
+            }} />
+            <div>
+              <i onClick={() => setEmojiModal(true)} className="iconfont icon-expressions" style={{ fontSize: 30, marginRight: 10, marginLeft: 10 }}></i>
+              <i className="iconfont icon-paper-full" style={{ fontSize: 30, color: '#16ac15' }} onClick={() => submit()}></i>
+            </div>
+          </footer>
+        ) : <footer style={{ background: '#878787', textAlign: 'center', justifyContent: 'center' }}> <span style={{ color: '#FFF', fontSize: 24, textAlign: 'center' }}>您已被禁言</span> </footer>
+      }
     </div >
   )
 }
-export default inject('commonState', 'chatState', 'userState', 'newsletterState')((observer(Chat)));
+export default inject('commonState', 'chatState', 'homeState', 'userState', 'newsletterState')((observer(Chat)));

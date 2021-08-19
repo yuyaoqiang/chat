@@ -8,7 +8,7 @@ const HeaderGroup = (props: any) => {
   const [checked, setChecked] = useState(false)
   const { groupInfo, setGroupInfo, setVisible } = props;
   return (
-    <div className="header-wrap">
+    <div className="header-group-wrap">
       <ul className="container">
         <li className="picture" onClick={() => setVisible(true)}>
           {

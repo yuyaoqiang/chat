@@ -1,5 +1,5 @@
 import { Data, Params } from 'src/request/entity.d';
-import { get, post } from "src/request/api"
+import { get, post, put } from "src/request/api"
 
 export const getGroupInfo = (params: Params) => {
  return get('/api/v1/group/info', params)
@@ -15,4 +15,7 @@ export const forbidden = (data: any) => {
 }
 export const kickOff = (data: any) => {
  return post('/api/v1/group/kick-off', data)
+}
+export const dismiss = (data: any) => {
+ return put('/api/v1/group/dismiss', data)
 }

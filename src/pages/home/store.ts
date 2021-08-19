@@ -7,7 +7,6 @@ class HomeState {
    this.getChatListByLocal()
    subscriber('RECEIVE_CHAT_MSG', this.setUnreadList)
   })
-
  }
 
  // 未读
@@ -28,49 +27,64 @@ class HomeState {
     if (index !== -1) {
      if (this.userAtChat === msg.oriToChatUserCode) {
       this.unreadList[index] = { ...msg, unreadCount: 0 }
+      this.countReadHandle()
+      this.setChatListByLocal(this.unreadList)
       return;
      }
      let count = this.unreadList[index].unreadCount;
      this.unreadList[index] = { ...msg, unreadCount: count + 1 }
+     this.countReadHandle()
+     this.setChatListByLocal(this.unreadList)
+     return;
     } else {
      if (this.userAtChat === msg.oriToChatUserCode) {
       this.unreadList = [{ ...msg, unreadCount: 0 }, ...this.unreadList]
+      this.countReadHandle()
+      this.setChatListByLocal(this.unreadList)
       return;
      }
      this.unreadList = [{ ...msg, unreadCount: 1 }, ...this.unreadList]
+     this.countReadHandle()
+     this.setChatListByLocal(this.unreadList)
     }
-    this.countReadHandle()
-    this.setChatListByLocal(this.unreadList)
    }
    if (msg.oriToChatUserType === 'USER') {
+    let index = 0;
     let loginUserStr = sessionStorage.getItem('user') || ''
     let loginUser = JSON.parse(loginUserStr)
-    let index = this.unreadList.findIndex((item: any) => item.oriToChatUserCode == msg.oriToChatUserCode)
     if (loginUser.code === msg.senderCode) {
-     let { senderCode, oriToChatUserCode, oriToChatUserNickName, senderNickName } = msg;
-     msg.senderCode = oriToChatUserCode;
-     msg.oriToChatUserCode = senderCode;
-     msg.oriToChatUserNickName = senderNickName;
-     msg.senderNickName = oriToChatUserNickName;
-     index = this.unreadList.findIndex((item: any) => item.senderCode == msg.senderCode)
+     let copyMsg = Object.assign({}, msg)
+     msg.senderCode = copyMsg.oriToChatUserCode;
+     msg.oriToChatUserCode = copyMsg.senderCode;
+     msg.oriToChatUserNickName = copyMsg.senderNickName;
+     msg.senderNickName = copyMsg.oriToChatUserNickName;
+     index = this.unreadList.findIndex((item: any) => item.senderCode === msg.senderCode)
+    } else {
+     index = this.unreadList.findIndex((item: any) => item.oriToChatUserCode == msg.oriToChatUserCode)
     }
     if (index !== -1) {
      if (this.userAtChat === msg.senderCode) {
       this.unreadList[index] = { ...msg, unreadCount: 0 }
+      this.countReadHandle()
+      this.setChatListByLocal(this.unreadList)
       return;
      }
      let count = this.unreadList[index].unreadCount;
      this.unreadList[index] = { ...msg, unreadCount: count + 1 }
+     this.countReadHandle()
+     this.setChatListByLocal(this.unreadList)
     } else {
      if (this.userAtChat === msg.senderCode) {
       this.unreadList = [{ ...msg, unreadCount: 0 }, ...this.unreadList]
+      this.countReadHandle()
+      this.setChatListByLocal(this.unreadList)
       return;
      }
      this.unreadList = [{ ...msg, unreadCount: 1 }, ...this.unreadList]
+     this.countReadHandle()
+     this.setChatListByLocal(this.unreadList)
     }
    }
-   this.countReadHandle()
-   this.setChatListByLocal(this.unreadList)
   }
  }
  @action
@@ -99,10 +113,15 @@ class HomeState {
   this.setChatListByLocal(this.unreadList)
   this.countReadHandle()
  }
-
+ @action
+ initHistoryAndListener = () => {
+  this.getChatListByLocal()
+  subscriber('RECEIVE_CHAT_MSG', this.setUnreadList)
+ }
  @action
  setCurrentUser = (userAtChat: any) => {
   this.userAtChat = userAtChat;
+
  }
  // 统计所有记录数量
  countReadHandle = () => {
@@ -114,6 +133,7 @@ class HomeState {
  @action
  getChatListByLocal = () => {
   let loginUserStr = sessionStorage.getItem('user') || ''
+  if (!loginUserStr) return;
   let loginUser = JSON.parse(loginUserStr)
   let chatsStr = localStorage.getItem(loginUser.code + 'chats')
   if (chatsStr) {

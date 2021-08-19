@@ -124,31 +124,17 @@ const Home = (props: any) => {
         <p className="sort-word">{item.initial}</p>
         {
          item.data.map((user: any) => (
-          <SwipeAction
-           style={{ backgroundColor: 'gray' }}
-           key={item.initial}
-           autoClose
-           right={[
-            {
-             text: '删除',
-             onPress: () => console.log('delete'),
-             style: { backgroundColor: '#F4333C', fontSize: '16px', color: 'white' },
-            },
-           ]}
-           onOpen={() => console.log('global open')}
-           onClose={() => console.log('global close')}
-          >
-           <li className="chat-item" onClick={() => pushRouter(user)}>
-            <p className="chat-item-left">
-             <img src={user.headIcon} alt="" />
+          <li className="chat-item" key={item.initial} onClick={() => pushRouter(user)}>
+           <p className="chat-item-left">
+            <img src={user.headIcon} alt="" />
+           </p>
+           <div className="chat-item-right">
+            <p className="chat-name-date">
+             {user.userType === 'USER' && <span style={{color:'#56c156'}}>{user.nickName}</span>}
+             {user.userType === 'GROUP' && <span style={{color:'#ff6fce'}}>{user.nickName}</span>}
             </p>
-            <div className="chat-item-right">
-             <p className="chat-name-date">
-              <span>{user.nickName}</span>
-             </p>
-            </div>
-           </li>
-          </SwipeAction>
+           </div>
+          </li>
          ))
         }
        </div>
@@ -162,31 +148,16 @@ const Home = (props: any) => {
         <p className="sort-word">{item.initial}</p>
         {
          item.data.map((user: any) => (
-          <SwipeAction
-           style={{ backgroundColor: 'gray' }}
-           key={item.initial}
-           autoClose
-           right={[
-            {
-             text: '删除',
-             onPress: () => console.log('delete'),
-             style: { backgroundColor: '#F4333C', fontSize: '16px', color: 'white' },
-            },
-           ]}
-           onOpen={() => console.log('global open')}
-           onClose={() => console.log('global close')}
-          >
-           <li className="chat-item" onClick={() => searchFilter(user)}>
-            <p className="chat-item-left">
-             <img src="https://zos.alipayobjects.com/rmsportal/hqQWgTXdrlmVVYi.jpeg" alt="" />
+          <li className="chat-item" key={item.initial} onClick={() => searchFilter(user)}>
+           <p className="chat-item-left">
+            <img src={item.headIcon} alt="" />
+           </p>
+           <div className="chat-item-right">
+            <p className="chat-name-date">
+             <span>{user.nickName}</span>
             </p>
-            <div className="chat-item-right">
-             <p className="chat-name-date">
-              <span>{user.nickName}</span>
-             </p>
-            </div>
-           </li>
-          </SwipeAction>
+           </div>
+          </li>
          ))
         }
        </div>
@@ -195,7 +166,7 @@ const Home = (props: any) => {
     }
    </ul>
    <NavBar />
-  </div>
+  </div >
  )
 }
-export default inject('newsletterState','chatState')((observer(Home)));
+export default inject('newsletterState', 'chatState')((observer(Home)));

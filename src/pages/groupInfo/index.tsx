@@ -3,15 +3,16 @@ import NavBar from "@components/navBar"
 import { observer, inject } from "mobx-react"
 import { copyArticle } from "@utils/helpers"
 import { useHistory } from "react-router-dom";
-import { getGroupInfo, kickOff, transferOwner, forbidden, setAdmin } from "./request"
+import { getGroupInfo, kickOff, transferOwner, forbidden, setAdmin, dismiss } from "./request"
 import { List, Button, Switch, SwipeAction, Toast } from "antd-mobile";
 import './style.scss'
+import { yyyymmddhhmmss } from "@utils/dataTime";
 const Home = (props: any) => {
   const { push, goBack } = useHistory();
-  const { location, userState, homeState,chatState } = props;
+  const { location, userState, homeState, chatState } = props;
   const { state = {} } = location;
   const { user } = userState;
-  const { setCurrentUser } = homeState;
+  const { setCurrentUser, delMsgByCode } = homeState;
   const { setChatUser } = chatState;
   const [groupInfo, setGroupInfo] = useState<any>({})
   const [myRole, setMyRole] = useState('')
@@ -76,17 +77,38 @@ const Home = (props: any) => {
       setMyRole('owner')
       return
     }
-    if (users.adminMembers.includes(user.code)) {
+    let admins = users.adminMembers.filter((item: any) => item.code === user.code)
+    if (admins.length > 0) {
       setMyRole('admin')
-      return
+      return;
     }
     setMyRole('member')
   }
   const toChatPage = (item: any) => {
-    setChatUser({ ...item, oriToChatUserCode: item.partnerCode,oriToChatUserType:item.userType })
+    setChatUser({ ...item, oriToChatUserCode: item.partnerCode, oriToChatUserType: item.userType })
     setCurrentUser(item.partnerCode)
     push({ pathname: '/chat', state: item })
   }
+  const disbandGroup = () => {
+    dismiss({ groupCode: state.partnerCode }).then((res) => {
+      state.oriToChatUserType = state.userType;
+      state.oriToChatUserCode = state.partnerCode;
+      Toast.success('群组已解散')
+      delMsgByCode(state)
+      push('/newsletter')
+    })
+  }
+  const toChatByMember = (item: any) => {
+    if (item.code === user.code) {
+      push('/my')
+      return;
+    }
+    let latest = Object.assign({}, item);
+    latest.userType = latest.chatUserType
+    latest.partnerCode = latest.code
+    push({ pathname: '/chat', state: latest })
+  }
+
   return (
     <div className="group-wrap">
       <i className=" iconfont icon-fanhui goback" style={{ fontSize: 24, color: '#333' }} onClick={() => goBack()}></i>
@@ -109,6 +131,7 @@ const Home = (props: any) => {
             groupInfo.groupMembers && groupInfo.groupMembers.map((item: any, index: number) => {
               let role = returnRoleByUsers(item, groupInfo)
               let forbidden = forbiddenRole(item)
+              console.log(myRole)
               return (
                 <SwipeAction
                   style={{ backgroundColor: 'gray' }}
@@ -139,18 +162,24 @@ const Home = (props: any) => {
                     },
                   ] : []}
                 >
-                  <List.Item onClick={() => push('/friendInfo')}>
+                  <List.Item onClick={() => toChatByMember(item)}>
                     <div className="sign-friend">
-                      <img src="https://zos.alipayobjects.com/rmsportal/hqQWgTXdrlmVVYi.jpeg" />
-                      <div>
-                        <span className="friend-name">{item.nickName}</span>
-                        <p>
-                          {role === 'owner' && <span className="owner">群主</span>}
-                          {role === 'admin' && <span className="admin">管理员</span>}
-                          {role === 'member' && <span className="member">成员</span>}
-                          {['owner', 'admin'].includes(myRole) && forbidden && <span className="member">禁言</span>}
-                          {/* <span className="online">在线</span> */}
-                        </p>
+                      <img src={item.headIcon} />
+                      <div className="" style={{ width: '80%', display: 'flex', fontSize: 12, alignItems: 'center', justifyContent: 'space-between' }}>
+                        <div>
+                          <span className="friend-name">{item.nickName}</span>
+                          <p>
+                            {role === 'owner' && <span className="owner">群主</span>}
+                            {role === 'admin' && <span className="admin">管理员</span>}
+                            {role === 'member' && <span className="member">成员</span>}
+                            {['owner', 'admin'].includes(myRole) && forbidden && <span className="member">禁言</span>}
+                            {/* <span className="online">在线</span> */}
+                          </p>
+                        </div>
+                        <div className="member-info" style={{ display: 'flex', flexFlow: 'column' }} >
+                          {['admin', 'owner'].includes(myRole) && <span>登录时间:{yyyymmddhhmmss(item.lastAccessTime)}</span>}
+                          {['admin', 'owner'].includes(myRole) && <span>登录IP:{item.lastAccessIp}</span>}
+                        </div>
                       </div>
                     </div>
                   </List.Item>
@@ -166,8 +195,13 @@ const Home = (props: any) => {
           onClick={() => {
             toChatPage(state)
           }}>发消息</Button>
+        {myRole === 'owner' &&
+          <Button style={{ color: 'red' }}
+            onClick={() => {
+              disbandGroup()
+            }}>解散群组</Button>}
       </List>
     </div>
   )
 }
-export default inject('homeState', 'userState','chatState')((observer(Home)));
+export default inject('homeState', 'userState', 'chatState')((observer(Home)));

@@ -21,7 +21,7 @@ class UserState {
   @action
   setUserInfo = () => {
     mine({}).then((res: any) => {
-      this.user = { ...this.user, ...res};
+      this.user = { ...this.user, ...res };
       sessionStorage.setItem('user', JSON.stringify(this.user))
     })
   }
