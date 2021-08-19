@@ -1,23 +1,37 @@
-import avatarIcon1 from "../assets/img/avatars/icon1.jpg"
-import avatarIcon2 from "../assets/img/avatars/icon2.jpg"
-import avatarIcon3 from "../assets/img/avatars/icon3.jpg"
-import avatarIcon4 from "../assets/img/avatars/icon4.jpg"
-import avatarIcon5 from "../assets/img/avatars/icon5.jpg"
-import avatarIcon6 from "../assets/img/avatars/icon6.jpg"
-import avatarIcon7 from "../assets/img/avatars/icon7.jpg"
-import avatarIcon8 from "../assets/img/avatars/icon8.jpg"
-import avatarIcon9 from "../assets/img/avatars/icon9.jpg"
-import avatarIcon10 from "../assets/img/avatars/icon10.jpg"
-import avatarIcon11 from "../assets/img/avatars/icon11.jpg"
-import avatarIcon12 from "../assets/img/avatars/icon12.jpg"
-import avatarIcon13 from "../assets/img/avatars/icon13.jpg"
-import avatarIcon14 from "../assets/img/avatars/icon14.jpg"
-import avatarIcon15 from "../assets/img/avatars/icon15.jpg"
-import avatarIcon16 from "../assets/img/avatars/icon16.jpg"
-import avatarIcon17 from "../assets/img/avatars/icon17.jpg"
-import avatarIcon18 from "../assets/img/avatars/icon18.jpg"
-import avatarIcon19 from "../assets/img/avatars/icon19.jpg"
-import avatarIcon20 from "../assets/img/avatars/icon20.jpg"
+import avatarIcon1 from "../assets/img/avatars/icon1.png"
+import avatarIcon2 from "../assets/img/avatars/icon2.png"
+import avatarIcon3 from "../assets/img/avatars/icon3.png"
+import avatarIcon4 from "../assets/img/avatars/icon4.png"
+import avatarIcon5 from "../assets/img/avatars/icon5.png"
+import avatarIcon6 from "../assets/img/avatars/icon6.png"
+import avatarIcon7 from "../assets/img/avatars/icon7.png"
+import avatarIcon8 from "../assets/img/avatars/icon8.png"
+import avatarIcon9 from "../assets/img/avatars/icon9.png"
+import avatarIcon10 from "../assets/img/avatars/icon10.png"
+import avatarIcon11 from "../assets/img/avatars/icon11.png"
+import avatarIcon12 from "../assets/img/avatars/icon12.png"
+import avatarIcon13 from "../assets/img/avatars/icon13.png"
+import avatarIcon14 from "../assets/img/avatars/icon14.png"
+import avatarIcon15 from "../assets/img/avatars/icon15.png"
+import avatarIcon16 from "../assets/img/avatars/icon16.png"
+import avatarIcon17 from "../assets/img/avatars/icon17.png"
+import avatarIcon18 from "../assets/img/avatars/icon18.png"
+import avatarIcon19 from "../assets/img/avatars/icon19.png"
+import avatarIcon20 from "../assets/img/avatars/icon20.png"
+
+import gpAvatarIcon1 from "../assets/img/avatars/groupIcon1.jpg"
+import gpAvatarIcon2 from "../assets/img/avatars/groupIcon2.jpg"
+import gpAvatarIcon3 from "../assets/img/avatars/groupIcon3.jpg"
+import gpAvatarIcon4 from "../assets/img/avatars/groupIcon4.jpg"
+import gpAvatarIcon5 from "../assets/img/avatars/groupIcon5.jpg"
+import gpAvatarIcon6 from "../assets/img/avatars/groupIcon6.jpg"
+import gpAvatarIcon7 from "../assets/img/avatars/groupIcon7.jpg"
+import gpAvatarIcon8 from "../assets/img/avatars/groupIcon8.jpg"
+import gpAvatarIcon9 from "../assets/img/avatars/groupIcon9.jpg"
+import gpAvatarIcon10 from "../assets/img/avatars/groupIcon10.jpg"
+import gpAvatarIcon11 from "../assets/img/avatars/groupIcon11.jpg"
+import gpAvatarIcon12 from "../assets/img/avatars/groupIcon12.jpg"
+
 const avatarsMap = {
    "icon1": avatarIcon1,
    "icon2": avatarIcon2,
@@ -60,7 +74,37 @@ const avatars = [
     { name: 'icon16', icon: avatarIcon16 },
     { name: 'icon17', icon: avatarIcon17 },
     { name: 'icon18', icon: avatarIcon18 },
-    { name: 'icon19', icon: avatarIcon18 },
+    { name: 'icon19', icon: avatarIcon19 },
     { name: 'icon20', icon: avatarIcon20 }
 ]
-export {avatars, avatarsMap}
+
+const gpAvatarsMap = {
+    "icon1": gpAvatarIcon1,
+    "icon2": gpAvatarIcon2,
+    "icon3": gpAvatarIcon3,
+    "icon4": gpAvatarIcon4,
+    "icon5": gpAvatarIcon5,
+    "icon6": gpAvatarIcon6,
+    "icon7": gpAvatarIcon7,
+    "icon8": gpAvatarIcon8,
+    "icon9": gpAvatarIcon9,
+    "icon10": gpAvatarIcon10,
+    "icon11": gpAvatarIcon11,
+    "icon12": gpAvatarIcon12
+ }
+ const gpAvatars = [
+    { name: 'icon1', icon: gpAvatarIcon1 },
+    { name: 'icon2', icon: gpAvatarIcon2 },
+    { name: 'icon3', icon: gpAvatarIcon3 },
+    { name: 'icon4', icon: gpAvatarIcon4 },
+    { name: 'icon5', icon: gpAvatarIcon5 },
+    { name: 'icon6', icon: gpAvatarIcon6 },
+    { name: 'icon7', icon: gpAvatarIcon7 },
+    { name: 'icon8', icon: gpAvatarIcon8 },
+    { name: 'icon9', icon: gpAvatarIcon9 },
+    { name: 'icon10', icon: gpAvatarIcon10 },
+    { name: 'icon11', icon: gpAvatarIcon11 },
+    { name: 'icon12', icon: gpAvatarIcon12 }
+]
+
+export {avatars, avatarsMap, gpAvatarsMap, gpAvatars}

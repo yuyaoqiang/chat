@@ -21,6 +21,7 @@ const Home = (props: any) => {
       setVisible(true)
    }
    const submitHeader = (imgUrl: string) => {
+      console.log('imgUrl',imgUrl)
       setInfo({ userCode: user.code, headIcon: imgUrl, nickName: user.nickName }).then(res => {
          setUserInfo();
          Toast.success('修改头像成功')

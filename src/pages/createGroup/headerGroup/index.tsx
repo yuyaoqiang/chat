@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import useServiceHooks from "@hooks/useServiceHooks"
 import { List, Switch, Modal, Toast } from "antd-mobile";
+import {avatars, avatarsMap, gpAvatars, gpAvatarsMap} from "@utils/avatarData";
 import "./style.scss"
 const prompt = Modal.prompt;
 const HeaderGroup = (props: any) => {
   const [checked, setChecked] = useState(false)
   const { groupInfo, setGroupInfo, setVisible } = props;
+  console.log('groupInfo',groupInfo)
   return (
     <div className="header-group-wrap">
       <ul className="container">

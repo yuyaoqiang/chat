@@ -7,29 +7,8 @@ import { useHistory } from "react-router-dom";
 import { Checkbox, Toast } from "antd-mobile";
 import { create } from "./request";
 import { setInfo } from "@pages/my/request"
+import {avatars, avatarsMap, gpAvatars, gpAvatarsMap} from "@utils/avatarData";
 import './style.scss'
-const urls = [
- "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
- "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
- "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
- "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
- "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
- "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
- "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
- "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
- "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
- "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
- "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
- "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
- "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
- "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
- "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
- "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
- "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
- "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
- "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
- "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png",
-]
 const Home = (props: any) => {
  const { push, goBack } = useHistory();
  const { newsletterState } = props;
@@ -65,7 +44,7 @@ const Home = (props: any) => {
    push("/newsletter")
   })
  }
- console.log(onlyFriends)
+ console.log('fridens',onlyFriends)
  return (
   <div className="create-group-wrap">
    <header>
@@ -88,7 +67,7 @@ const Home = (props: any) => {
           <Checkbox.CheckboxItem key={user.partnerCode} checked={groupInfo.userCode.includes(user.partnerCode)} onClick={() => checkedFriends(user.partnerCode)}>
            <li className="chat-item" key={user.partnerCode} >
             <p className="chat-item-left">
-             <img src={user.headIcon} alt="" />
+             <img src={avatarsMap[`icon${user.headIcon}`]} alt="" />
             </p>
             <div className="chat-item-right">
              <p className="chat-name-date">
@@ -105,7 +84,7 @@ const Home = (props: any) => {
     }
    </ul>
    {visible && <Avatar
-    imgData={urls} visible={visible}
+    imgData={gpAvatars} visible={visible}
     setVisible={setVisible}
     submit={(icon: string) => {
      setGroupInfo({ ...groupInfo, groupHeadIcon: icon })
