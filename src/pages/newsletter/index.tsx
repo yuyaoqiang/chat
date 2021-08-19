@@ -6,6 +6,8 @@ import useDebounce from "@hooks/useDebounce"
 import { relations, searchChatUser, invitation, invitationHandleWay } from "./request";
 import { SearchBar, SwipeAction, Button, Toast } from "antd-mobile";
 import { pySegSort } from "@entity/PinYin"
+import {avatars, avatarsMap, gpAvatars, gpAvatarsMap} from "@utils/avatarData";
+
 import './style.scss'
 const Home = (props: any) => {
  const { push } = useHistory();
