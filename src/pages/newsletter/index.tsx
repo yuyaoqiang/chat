@@ -6,8 +6,8 @@ import useDebounce from "@hooks/useDebounce"
 import { relations, searchChatUser, invitation, invitationHandleWay } from "./request";
 import { SearchBar, SwipeAction, Button, Toast } from "antd-mobile";
 import { pySegSort } from "@entity/PinYin"
+import {avatars, avatarsMap, gpAvatars} from "@utils/avatarData";
 import './style.scss'
-import { avatarsMap } from "@utils/avatarData";
 const Home = (props: any) => {
  const { push } = useHistory();
  const { newsletterState, chatState } = props;

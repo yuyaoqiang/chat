@@ -12,6 +12,7 @@ const SearchInfo = React.lazy(() => import('@pages/searchInfo'));
 const GroupInfo = React.lazy(() => import('@pages/groupInfo'));
 const CreateGroup = React.lazy(() => import('@pages/createGroup'));
 const joinGroupInfo = React.lazy(() => import('@pages/joinGroupInfo'));
+const IosDownload = React.lazy(() => import('@pages/iosDownload'));
 const routeMap = [
   // 首页
   {
@@ -96,6 +97,13 @@ const routeMap = [
     path: "/login",
     name: "login",
     component: Login,
+    auth: false,
+  },
+  // 登录
+  {
+    path: "/iosdownload",
+    name: "iosdownload",
+    component: IosDownload,
     auth: false,
   },
   // 注册

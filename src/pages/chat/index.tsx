@@ -241,7 +241,6 @@ const Chat = (props: any) => {
     }
     return <p className="chat-time">{mm_dd_hh_mm_ss3(nowChat.sendTime)}</p>
   }
-  console.log(state)
   return (
     <div className="main-chat-wrap">
       <header>

@@ -7,7 +7,11 @@ const AuthRoute = (props: any) => {
  const { pathname } = useLocation();
  const { userState } = props;
  let { user } = userState;
- const targetRouteObj: any = routers.find((item) => item.path === pathname)
+ const targetRouteObj: any = routers.find((item) =>{
+  console.log(item.path)
+  return item.path === pathname
+ })
+
  let { component } = targetRouteObj
  // 不需要拦截的页面直接放行
  if (targetRouteObj && !targetRouteObj.auth && !user.isLogin) {

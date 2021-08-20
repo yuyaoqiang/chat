@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
-import NavBar from "@components/navBar"
 import { observer, inject } from "mobx-react"
 import { copyArticle } from "@utils/helpers"
+import Avatar from "@components/avatar"
 import { useHistory } from "react-router-dom";
 import { getGroupInfo, kickOff, transferOwner, forbidden, setAdmin, dismiss } from "./request"
-import { List, Button, Switch, SwipeAction, Toast } from "antd-mobile";
+import { setInfo } from "@pages/my/request"
+import { List, Button, Switch, SwipeAction, Toast, Modal } from "antd-mobile";
 import './style.scss'
 import { yyyymmddhhmmss } from "@utils/dataTime";
-import { avatarsMap } from "@utils/avatarData";
+import { avatarsMap, gpAvatars } from "@utils/avatarData";
+const prompt = Modal.prompt;
 const Home = (props: any) => {
   const { push, goBack } = useHistory();
   const { location, userState, homeState, chatState } = props;
@@ -15,6 +17,7 @@ const Home = (props: any) => {
   const { user } = userState;
   const { setCurrentUser, delMsgByCode } = homeState;
   const { setChatUser } = chatState;
+  const [visible, setVisible] = useState(false)
   const [groupInfo, setGroupInfo] = useState<any>({})
   const [myRole, setMyRole] = useState('')
   useEffect(() => {
@@ -34,6 +37,21 @@ const Home = (props: any) => {
       }
       setGroupInfo(res)
       returnRoleByMe(res)
+    })
+  }
+  const submitHeader = (imgUrl: string) => {
+    setGroupInfo({ ...groupInfo, headIcon: imgUrl })
+    setInfo({ ...groupInfo, userCode: groupInfo.code, headIcon: imgUrl, nickName: groupInfo.nickName }).then(res => {
+      Toast.success('修改头像成功')
+      setVisible(false)
+    })
+  }
+
+  const submitNickName = (name: string) => {
+    setGroupInfo({ ...groupInfo, nickName: name })
+    setInfo({ ...groupInfo, userCode: groupInfo.code, headIcon: groupInfo.headIcon, nickName: name }).then(res => {
+      Toast.success('修改昵称成功')
+      setVisible(false)
     })
   }
   const setAdminHandle = (item: any) => {
@@ -120,10 +138,24 @@ const Home = (props: any) => {
     <div className="group-wrap">
       <i className=" iconfont icon-fanhui goback" style={{ fontSize: 24, color: '#333' }} onClick={() => goBack()}></i>
       <div className="my-top">
-        <img src={avatarsMap[groupInfo.headIcon]} alt="" />
-        <p>
+        <img src={avatarsMap[groupInfo.headIcon]} onClick={() => setVisible(true)} alt="" />
+        <p style={{ position: 'relative', width: '50%' }}>
           <span>{groupInfo.nickName}</span>
           <span>圈子号: {groupInfo.code}</span>
+          <i
+            className="edit-icon iconfont icon-icon-"
+            style={{ fontSize: 30 }}
+            onClick={() => prompt('昵称', '请输入昵称',
+              [
+                {
+                  text: '取消',
+                  onPress: value => { }
+                },
+                {
+                  text: '确定',
+                  onPress: value => { submitNickName(value) },
+                },
+              ], 'default', undefined, ['请输入昵称'])}></i>
         </p>
       </div>
       <List className="my-list">
@@ -207,6 +239,13 @@ const Home = (props: any) => {
               disbandGroup()
             }}>解散群组</Button>}
       </List>
+      {visible && <Avatar
+        imgData={gpAvatars} visible={visible}
+        setVisible={setVisible}
+        submit={(icon: string) => {
+          submitHeader(icon)
+          setVisible(false)
+        }} />}
     </div>
   )
 }

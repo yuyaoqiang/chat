@@ -508,6 +508,5 @@ export function pySegSort(tarr: any) {
     res.segs.shift();
     res.segs.push(first)
   }
-  console.log(res.segs);
   return res.segs;
 }

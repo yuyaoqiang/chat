@@ -4,6 +4,7 @@ import { observer, inject } from "mobx-react"
 import { useHistory } from "react-router-dom";
 import { mm_dd_hh_mm_ss3 } from "@utils/dataTime"
 import { SearchBar, SwipeAction, Badge } from "antd-mobile";
+import DownLoad from "@components/download"
 import './style.scss'
 import { avatarsMap } from "@utils/avatarData";
 const Home = (props: any) => {
@@ -88,6 +89,7 @@ const Home = (props: any) => {
           })
         }
       </ul>
+      <DownLoad />
       <NavBar />
     </div>
   )

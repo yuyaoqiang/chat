@@ -17,6 +17,15 @@ class UserState {
     isLogin: false,
   }
   @observable userInfo = {};
+ // 下载连接显示
+ @observable showDownLoadLink = true;
+ @action setShowDownLoadLink = (param: boolean) => {
+   this.showDownLoadLink = param;
+ };
+ @observable isIosLink = false;
+ @action setIsIosLink = (param: boolean) => {
+   this.isIosLink = param;
+ };
 
   @action
   setUserInfo = () => {

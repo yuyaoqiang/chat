@@ -3,6 +3,7 @@ import { Toast } from "antd-mobile"
 import { useHistory } from "react-router-dom";
 import HeaderBar from "@components/header"
 import { observer, inject } from "mobx-react"
+import DownLoad  from "@components/download"
 import { login } from "./request"
 import "./style.scss"
 const Login = (props: any) => {
@@ -26,6 +27,7 @@ const Login = (props: any) => {
   }
   return (
     <div className="login-wrap">
+      <DownLoad loginPage />
       <h3 className="login-title">贵圈登陆</h3>
       <div className="login-inputs">
         <p className="inputs">
