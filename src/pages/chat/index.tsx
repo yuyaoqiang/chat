@@ -20,7 +20,7 @@ const Chat = (props: any) => {
   const ref: any = useRef(null);
   const chatWrapRef: any = useRef(null);
   const { userState, location, chatState, newsletterState, homeState } = props;
-  const { setHistory, chatsData, sendMsg } = chatState;
+  const { setHistory, chatsData, sendMsg, mute } = chatState;
   const { delMsgByCode } = homeState;
   const { friends } = newsletterState
   const { state = {} } = location;
@@ -306,7 +306,7 @@ const Chat = (props: any) => {
         }
       </Modal>
       {
-        !forbiddenMember ? (
+        !forbiddenMember && !mute ? (
           <footer>
             <TextareaItem rows={2} labelNumber={1} value={content} onChange={(value: any) => {
               setContent(value)
@@ -316,7 +316,8 @@ const Chat = (props: any) => {
               <i className="iconfont icon-paper-full" style={{ fontSize: 30, color: '#16ac15' }} onClick={() => submit()}></i>
             </div>
           </footer>
-        ) : <footer>
+        )
+          : <footer>
             <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 999, background: '#878787', opacity: 0.1, display: 'flex', alignItems: 'center', paddingLeft: 100 }}> 已禁言</div>
             <TextareaItem rows={2} labelNumber={1} value={content} onChange={(value: any) => {
               setContent(value)

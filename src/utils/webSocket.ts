@@ -65,6 +65,10 @@ const msg = () => {
    publish.publish(data.cmdKey, data)
    // 聊天页面
    publish.publish('GET_CHAT_MSG', data2)
+   // 系统消息
+   if (data.senderHeadIcon === 'SYSTEM') {
+    publish.publish('SYSTEM_MSG', data2)
+   }
   }
  })
 }

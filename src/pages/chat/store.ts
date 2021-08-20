@@ -6,9 +6,11 @@ class ChatState {
   makeObservable(this)
   subscriber('GET_CHAT_MSG', this.setMsg)
   subscriber('reconnect', this.queryPageDataByChatUser)
+  subscriber('SYSTEM_MSG', this.systemMsg)
  }
  @observable chatsData: any[] = [];
  @observable chatUser: any = {}
+ @observable mute: boolean = false
  // 设置来信
  @action
  setMsg = (msg: any) => {
@@ -25,6 +27,15 @@ class ChatState {
    if (this.chatUser.senderCode === msg.senderCode) {
     this.chatsData = [...this.chatsData, msg]
    }
+  }
+ }
+ // 获取系统消息
+ systemMsg = (msg: any) => {
+  if (msg.msg === '您已被禁言') {
+   this.mute = true;
+  }
+  if (msg.msg === '您已被取消禁言') {
+   this.mute = false;
   }
  }
  // 设置发送信息
