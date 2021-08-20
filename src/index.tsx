@@ -6,6 +6,7 @@ import { Provider } from 'mobx-react';
 import Store from './store';
 import 'lib-flexible';
 import FastClick from 'fastclick';
+import reportWebVitals from './reportWebVitals';
 import './index.scss';
 FastClick.attach(document.body)
 ReactDOM.render(
@@ -15,3 +16,4 @@ ReactDOM.render(
     </Router>
   </Provider>
   , document.getElementById('root'));
+  reportWebVitals();
